@@ -5,7 +5,7 @@ format:
   html:
     output-file: index
     toc: true
-embed-resources: true
+embed-resources: false
 filters:
   - modal
 extensions:
