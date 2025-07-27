@@ -360,6 +360,32 @@ Clicking outside will not dismiss this modal.
 
 ## Scrollable Modal
 
+{{< modal toggle target="modal-scrollable" label="Open Scrollable Modal" >}}
+
+:::: {#modal-scrollable scrollable="true"}
+
+## Scrollable Modal
+
+This modal allows scrolling for long content.
+
+### Section 1
+
+{{< lipsum 1-1 >}}
+
+### Section 2
+
+{{< lipsum 2-2 >}}
+
+### Section 3
+
+{{< lipsum 3-3 >}}
+
+---
+
+{{< modal dismiss target="modal-scrollable" label="Close" >}}
+
+:::
+
 ```{.markdown shortcodes=false}
 {{< modal toggle target="modal-scrollable" label="Open Scrollable Modal" >}}
 
@@ -387,35 +413,23 @@ This modal allows scrolling for long content.
 
 :::
 ```
-
-{{< modal toggle target="modal-scrollable" label="Open Scrollable Modal" >}}
-
-:::: {#modal-scrollable scrollable="true"}
-
-## Scrollable Modal
-
-This modal allows scrolling for long content.
-
-### Section 1
-
-{{< lipsum 1-1 >}}
-
-### Section 2
-
-{{< lipsum 2-2 >}}
-
-### Section 3
-
-{{< lipsum 3-3 >}}
-
----
-
-{{< modal dismiss target="modal-scrollable" label="Close" >}}
-
-:::
 
 ## Modal With Keyboard Disabled
 
+{{< modal toggle target="modal-nokeyboard" label="Open No Keyboard Modal" >}}
+
+:::: {#modal-nokeyboard keyboard="false"}
+
+## No Keyboard Modal
+
+Pressing escape will not close this modal.
+
+---
+
+{{< modal dismiss target="modal-nokeyboard" label="Close" >}}
+
+:::
+
 ```{.markdown shortcodes=false}
 {{< modal toggle target="modal-nokeyboard" label="Open No Keyboard Modal" >}}
 
@@ -431,23 +445,26 @@ Pressing escape will not close this modal.
 
 :::
 ```
-
-{{< modal toggle target="modal-nokeyboard" label="Open No Keyboard Modal" >}}
-
-:::: {#modal-nokeyboard keyboard="false"}
-
-## No Keyboard Modal
-
-Pressing escape will not close this modal.
-
----
-
-{{< modal dismiss target="modal-nokeyboard" label="Close" >}}
-
-:::
 
 ## Modal With Custom Footer
 
+{{< modal toggle target="modal-footer" label="Open Modal With Footer" >}}
+
+:::: {#modal-footer}
+
+## Modal With Footer
+
+This modal has a custom footer.
+
+---
+
+:::: {style="text-align: right;"}
+{{< modal dismiss target="modal-footer" label="Cancel" >}}
+{{< modal dismiss target="modal-footer" label="OK" >}}
+:::
+
+:::
+
 ```{.markdown shortcodes=false}
 {{< modal toggle target="modal-footer" label="Open Modal With Footer" >}}
 
@@ -466,20 +483,3 @@ This modal has a custom footer.
 
 :::
 ```
-
-{{< modal toggle target="modal-footer" label="Open Modal With Footer" >}}
-
-:::: {#modal-footer}
-
-## Modal With Footer
-
-This modal has a custom footer.
-
----
-
-:::: {style="text-align: right;"}
-{{< modal dismiss target="modal-footer" label="Cancel" >}}
-{{< modal dismiss target="modal-footer" label="OK" >}}
-:::
-
-:::
