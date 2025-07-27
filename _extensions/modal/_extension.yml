@@ -1,0 +1,8 @@
+title: Modal
+author: Mickaël Canouil
+version: 1.0.0
+quarto-required: ">=99.9.0"
+contributes:
+  filters:
+    - modal.lua
+
