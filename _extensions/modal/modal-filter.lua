@@ -256,5 +256,16 @@ end
 
 return {
   { Meta = get_modal_meta },
-  { Div = modal }
+  { Div = modal },
+  { Link = function(el)
+      if el.target and not el.target:match('^#modal%-') then
+        return el
+      end
+      if el.attributes['data-bs-toggle'] == 'modal' then
+        return el
+      end
+      el.attributes['data-bs-target'] = el.target
+      el.attributes['data-bs-toggle'] = 'modal'
+      return el
+    end }
 }

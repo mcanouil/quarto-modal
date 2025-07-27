@@ -59,9 +59,19 @@ Alternatively, you can use the `bs-target` and `bs-toggle` attributes directly.
 
 ```markdown
 [Button Text]{bs-target="#<modal-id>" bs-toggle="modal"}
+[Button Text](#<modal-id>){bs-toggle="modal"}
+```
+
+Or rely on the extension to automatically expand to the correct HTML syntax:
+
+```markdown
+[Button Text](#<modal-id>)
 ```
 
 #### Modal Container
+
+> [!Important]
+> The identifier needs to start with `modal-` to be recognised by the extension as a modal container.
 
 ```{.markdown shortcodes=false}
 :::: {#modal-<id> description="<accessibility-description>" <options>}
