@@ -62,6 +62,12 @@ Modals are structured using a toggle button and a modal container.
 {{< modal <toggle|dismiss> target=<modal-id> label=<label> classes=<classes> inside=<boolean> >}}
 ```
 
+Alternatively, you can use the `bs-target` and `bs-toggle` attributes directly.
+
+```markdown
+[Button Text]{bs-target="#<modal-id>" bs-toggle="modal"}
+```
+
 #### Modal Container
 
 ```{.markdown shortcodes=false}
@@ -80,6 +86,8 @@ Footer content goes here.
 
 {{< modal toggle target="modal-basic" label="Open Basic Modal" >}}
 
+[This sentence is also a trigger to open the modal.]{bs-target="#modal-basic" bs-toggle="modal"}
+
 :::: {#modal-basic}
 
 ## Basic Modal
@@ -94,6 +102,8 @@ This is a basic modal example.
 
 ```{.markdown shortcodes=false}
 {{< modal toggle target="modal-basic" label="Open Basic Modal" >}}
+
+[This is also a trigger button for the modal]{bs-target="1modal-basic" bs-toggle="modal"}
 
 :::: {#modal-basic}
 

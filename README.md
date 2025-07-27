@@ -55,6 +55,12 @@ Modals are structured using a toggle button and a modal container.
 {{< modal <toggle|dismiss> target=<modal-id> label=<label> classes=<classes> inside=<boolean> >}}
 ```
 
+Alternatively, you can use the `bs-target` and `bs-toggle` attributes directly.
+
+```markdown
+[Button Text]{bs-target="#<modal-id>" bs-toggle="modal"}
+```
+
 #### Modal Container
 
 ```{.markdown shortcodes=false}
