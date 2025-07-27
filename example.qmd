@@ -54,4 +54,6 @@ format-links:
   - docx
   - pptx
 embed-resources: true
+filters:
+  - modal
 ---
