@@ -66,9 +66,20 @@ Alternatively, you can use the `bs-target` and `bs-toggle` attributes directly.
 
 ```markdown
 [Button Text]{bs-target="#<modal-id>" bs-toggle="modal"}
+[Button Text](#<modal-id>){bs-toggle="modal"}
+```
+
+Or rely on the extension to automatically expand to the correct HTML syntax:
+
+```markdown
+[Button Text](#<modal-id>)
 ```
 
 #### Modal Container
+
+:::: {.callout-important}
+The identifier needs to start with `modal-` to be recognised by the extension as a modal container.
+:::
 
 ```{.markdown shortcodes=false}
 :::: {#modal-<id> description="<accessibility-description>" <options>}
@@ -86,7 +97,7 @@ Footer content goes here.
 
 {{< modal toggle target="modal-basic" label="Open Basic Modal" >}}
 
-[This sentence is also a trigger to open the modal.]{bs-target="#modal-basic" bs-toggle="modal"}
+[This sentence is also a trigger to open the modal.](#modal-basic)
 
 :::: {#modal-basic}
 
@@ -103,7 +114,7 @@ This is a basic modal example.
 ```{.markdown shortcodes=false}
 {{< modal toggle target="modal-basic" label="Open Basic Modal" >}}
 
-[This is also a trigger button for the modal]{bs-target="1modal-basic" bs-toggle="modal"}
+[This sentence is also a trigger to open the modal.](#modal-basic)
 
 :::: {#modal-basic}
 
