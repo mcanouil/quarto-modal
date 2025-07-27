@@ -4,5 +4,6 @@ version: 0.0.0
 quarto-required: ">=99.9.0"
 contributes:
   filters:
-    - modal.lua
-
+    - modal-filter.lua
+  shortcodes: 
+    - modal-shortcode.lua
