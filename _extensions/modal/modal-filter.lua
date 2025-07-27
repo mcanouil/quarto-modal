@@ -152,8 +152,8 @@ end
 --- @param el table Pandoc Div element.
 --- @return table|nil Pandoc Div structure for modal, or nil if not applicable.
 local function modal(el)
-  if not quarto.doc.is_format("html:js") or not (el.identifier:match("^modal%-")) then
-    return el  
+  if not quarto.doc.is_format("html:js") or not quarto.doc.has_bootstrap() or not (el.identifier:match("^modal%-")) then
+    return pandoc.Null()
   end
 
   local modal_id = el.identifier ~= '' and el.identifier or unique_modal_id()
@@ -208,7 +208,6 @@ local function modal(el)
     end
   end
 
-  --- Modal header: raw HTML for title and close button, header level from markdown
   local modal_header_id = header_text and ascii_id(header_text) or "modal-title"
 
   local modal_header_html = pandoc.RawBlock('html',

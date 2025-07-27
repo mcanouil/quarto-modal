@@ -41,7 +41,7 @@ local stringify = pandoc.utils.stringify
 --- @param context table Pandoc context.
 --- @return pandoc.RawBlock HTML button or pandoc.Null if invalid.
 function modal(args, kwargs, meta, raw_args, context)
-  if not quarto.doc.is_format("html:js") then
+  if not quarto.doc.is_format("html:js") or not quarto.doc.has_bootstrap() then
     return pandoc.Null()
   end
 
