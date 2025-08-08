@@ -158,6 +158,14 @@ local function modal(el)
     return pandoc.Null()
   end
 
+  quarto.doc.add_html_dependency({
+    name = "modal-clipboard",
+    version = '1.0.0',
+    scripts = {
+      { path = "modal-clipboard.min.js", afterBody = true }
+    }
+  })
+
   local modal_id = el.identifier ~= '' and el.identifier or unique_modal_id()
   local modal_size = el.attributes.size or modal_settings_meta["size"]
   local modal_backdrop_static = el.attributes["backdrop-static"] or modal_settings_meta["backdrop-static"]
