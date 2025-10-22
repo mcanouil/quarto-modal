@@ -31,9 +31,9 @@
 ---   # Kwargs: target, label, classes, inside
 ---
 
---- Pandoc utility function for stringifying elements.
---- @type fun(element: table): string
-local stringify = pandoc.utils.stringify
+--- Load utils module
+local utils_path = quarto.utils.resolve_path("utils.lua")
+local utils = require(utils_path)
 
 --- Generate a Bootstrap modal button for Quarto shortcode.
 --- @param args table List of arguments (first is button type).
@@ -47,11 +47,11 @@ function modal(args, kwargs, meta, raw_args, context)
     return pandoc.Null()
   end
 
-  local button_type = stringify(args[1]) or "toggle"
-  local target = stringify(kwargs.target)
-  local label = stringify(kwargs.label)
-  local classes = stringify(kwargs.classes)
-  local inside = stringify(kwargs.inside) == "true"
+  local button_type = utils.stringify(args[1]) or "toggle"
+  local target = utils.stringify(kwargs.target)
+  local label = utils.stringify(kwargs.label)
+  local classes = utils.stringify(kwargs.classes)
+  local inside = utils.stringify(kwargs.inside) == "true"
 
   if (classes == "" or classes == nil) then
     if button_type == "toggle" or (label ~= "" and label ~= nil) then
