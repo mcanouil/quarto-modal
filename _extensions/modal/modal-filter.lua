@@ -33,8 +33,7 @@
 local EXTENSION_NAME = "modal"
 
 --- Load utils module
-local utils_path = quarto.utils.resolve_path("_modules/utils.lua")
-local utils = require(utils_path)
+local utils = require(quarto.utils.resolve_path("_modules/utils.lua"):gsub("%.lua$", ""))
 
 --- Generate unique modal ID
 local modal_count = 0
