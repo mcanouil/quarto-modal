@@ -29,6 +29,9 @@
 --- - Only applies to HTML output formats.
 ---
 
+--- Extension name constant
+local EXTENSION_NAME = "modal"
+
 --- Load utils module
 local utils_path = quarto.utils.resolve_path("_modules/utils.lua")
 local utils = require(utils_path)
@@ -139,7 +142,7 @@ local function modal(el)
   local modal_centred = el.attributes.centred or modal_settings_meta["centred"]
   local modal_centered = el.attributes.centered or modal_settings_meta["centered"]
   if el.attributes.centred and el.attributes.centered then
-    quarto.log.warning("Both 'centred' and 'centered' are set; using 'centred'.")
+    utils.log_warning(EXTENSION_NAME, "Both 'centred' and 'centered' are set; using 'centred'.")
   end
   if not modal_centred and modal_centered then
     modal_centred = modal_centered
