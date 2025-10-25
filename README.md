@@ -1,6 +1,7 @@
 # Modal Extension For Quarto
 
 This Quarto extension provides a simple way to create Bootstrap modals in your HTML documents.
+
 It allows you to define modal buttons and containers using shortcodes, making it easy to integrate modals into your content.
 
 ## Installation
@@ -10,6 +11,7 @@ quarto add mcanouil/quarto-modal
 ```
 
 This will install the extension under the `_extensions` subdirectory.
+
 If you're using version control, you will want to check in this directory.
 
 ## Usage
@@ -89,6 +91,6 @@ Footer content goes here.
 
 Here is the source code for a minimal example: [example.qmd](example.qmd).
 
-Outputs of `example.qmd`:
+Output of `example.qmd`:
 
 - [HTML](https://m.canouil.dev/quarto-modal/)

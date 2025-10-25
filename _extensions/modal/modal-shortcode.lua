@@ -9,10 +9,10 @@
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,58 +31,58 @@
 ---   # Kwargs: target, label, classes, inside
 ---
 
---- Pandoc utility function for stringifying elements.
---- @type fun(element: table): string
-local stringify = pandoc.utils.stringify
+--- Load utils module
+local utils = require(quarto.utils.resolve_path('_modules/utils.lua'):gsub('%.lua$', ''))
 
 --- Generate a Bootstrap modal button for Quarto shortcode.
 --- @param args table List of arguments (first is button type).
 --- @param kwargs table Key-value arguments (target, label, classes, inside).
---- @param meta table Pandoc document metadata.
---- @param raw_args table Raw arguments.
---- @param context table Pandoc context.
+--- @param _meta table Pandoc document metadata.
+--- @param _raw_args table Raw arguments.
+--- @param _context table Pandoc context.
 --- @return pandoc.RawBlock HTML button or pandoc.Null if invalid.
-function modal(args, kwargs, meta, raw_args, context)
-  if not quarto.doc.is_format("html:js") or not quarto.doc.has_bootstrap() then
+local function modal(args, kwargs, _meta, _raw_args, _context)
+  if not quarto.doc.is_format('html:js') or not quarto.doc.has_bootstrap() then
     return pandoc.Null()
   end
 
-  local button_type = stringify(args[1]) or "toggle"
-  local target = stringify(kwargs.target)
-  local label = stringify(kwargs.label)
-  local classes = stringify(kwargs.classes)
-  local inside = stringify(kwargs.inside) == "true"
+  local button_type = utils.stringify(args[1]) or 'toggle'
+  local target = utils.stringify(kwargs.target)
+  local label = utils.stringify(kwargs.label)
+  local classes = utils.stringify(kwargs.classes)
+  local inside = utils.stringify(kwargs.inside) == 'true'
 
-  if (classes == "" or classes == nil) then
-    if button_type == "toggle" or (label ~= "" and label ~= nil) then
-      classes = "btn btn-primary"
-    elseif button_type == "dismiss" then
-      classes = "btn-close"
+  if classes == '' then
+    if button_type == 'toggle' or label ~= '' then
+      classes = 'btn btn-primary'
+    elseif button_type == 'dismiss' then
+      classes = 'btn-close'
     end
   end
 
-  local button = pandoc.Null()
-  if button_type == "toggle" then
-    button = string.format(
+  --- @type string|nil HTML button string or nil if invalid button type
+  local button_html = nil
+  if button_type == 'toggle' then
+    button_html = string.format(
       '<button type="button" data-bs-toggle="modal" data-bs-target="#%s" class="%s">%s</button>',
       target, classes, label
     )
-  elseif button_type == "dismiss" then
+  elseif button_type == 'dismiss' then
     if inside then
-      button = string.format(
+      button_html = string.format(
         '<button type="button" class="%s" data-bs-dismiss="modal" aria-label="Close">%s</button>',
         classes, label
       )
     else
-      button = string.format(
+      button_html = string.format(
         '<button type="button" class="%s" data-bs-dismiss="modal" data-bs-target="#%s" aria-label="Close">%s</button>',
         classes, target, label
       )
     end
   end
 
-  if button ~= nil then
-    return pandoc.RawBlock("html", button)
+  if button_html then
+    return pandoc.RawBlock('html', button_html)
   else
     return pandoc.Null()
   end

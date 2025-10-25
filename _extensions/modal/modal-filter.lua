@@ -9,10 +9,10 @@
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,20 +29,17 @@
 --- - Only applies to HTML output formats.
 ---
 
---- Pandoc utility function for stringifying elements.
---- @type fun(element: table): string
-local stringify = pandoc.utils.stringify
+--- Extension name constant
+local EXTENSION_NAME = "modal"
+
+--- Load utils module
+local utils = require(quarto.utils.resolve_path("_modules/utils.lua"):gsub("%.lua$", ""))
 
 --- Generate unique modal ID
 local modal_count = 0
 local function unique_modal_id()
   modal_count = modal_count + 1
   return 'quarto-modal-' .. tostring(modal_count)
-end
-
---- Helper to build Pandoc attributes
-local function attr(id, classes, attributes)
-  return pandoc.Attr(id or '', classes or {}, attributes or {})
 end
 
 --- Modal settings default values.
@@ -63,42 +60,12 @@ local modal_settings_meta = {
 --- @return string The option value as a string.
 local function get_modal_option(key, meta)
   if meta['extensions'] and meta['extensions']['modal'] and meta['extensions']['modal'][key] then
-    return stringify(meta['extensions']['modal'][key])
+    return utils.stringify(meta['extensions']['modal'][key])
   end
 
   return modal_settings_meta[key] or ""
 end
 
----
---- Converts a string to a valid HTML id by lowercasing and replacing spaces.
----
---- @param text string The text to convert.
---- @return string The HTML id.
-function ascii_id(text)
-  local id = text:lower():gsub("[^a-z0-9 ]", ""):gsub(" +", "-")
-  return id
-end
-
----
---- Generates a raw HTML header element for modals.
----
---- @param level integer The header level (e.g., 2 for <h2>).
---- @param text string|nil The header text.
---- @param id string The id attribute for the header.
---- @param classes table List of classes for the header.
---- @param attributes table|nil Additional HTML attributes.
---- @return string Raw HTML string for the header.
-function raw_header(level, text, id, classes, attributes)
-  local attr_str = ''
-  if id and id ~= '' then attr_str = attr_str .. ' id="' .. id .. '"' end
-  if classes and #classes > 0 then attr_str = attr_str .. ' class="' .. table.concat(classes, ' ') .. '"' end
-  if attributes then
-    for k, v in pairs(attributes) do
-      attr_str = attr_str .. ' ' .. k .. '="' .. v .. '"'
-    end
-  end
-  return string.format('<h%d%s>%s</h%d>', level, attr_str, text or '', level)
-end
 
 ---
 --- Protects header blocks by converting them to raw HTML and prefixing ids.
@@ -106,7 +73,7 @@ end
 --- @param blocks table List of Pandoc blocks.
 --- @param modal_id string|nil Modal id to prefix header ids.
 --- @return table List of protected blocks.
-function protect_headers(blocks, modal_id)
+local function protect_headers(blocks, modal_id)
   local protected = {}
   for _, block in ipairs(blocks) do
     if block.t == 'Header' then
@@ -119,7 +86,7 @@ function protect_headers(blocks, modal_id)
       table.insert(protected,
         pandoc.RawBlock(
           'html',
-          raw_header(block.level, stringify(block.content), id, classes, attributes)
+          utils.raw_header(block.level, utils.stringify(block.content), id, classes, attributes)
         )
       )
     else
@@ -133,7 +100,7 @@ end
 ---
 --- @param meta table<string, any> Document metadata table.
 --- @return table<string, any> Updated metadata table with modal configuration.
-function get_modal_meta(meta)
+local function get_modal_meta(meta)
   local modal_options = {}
   for key, _ in pairs(modal_settings_meta) do
     modal_options[key] = get_modal_option(key, meta)
@@ -174,7 +141,7 @@ local function modal(el)
   local modal_centred = el.attributes.centred or modal_settings_meta["centred"]
   local modal_centered = el.attributes.centered or modal_settings_meta["centered"]
   if el.attributes.centred and el.attributes.centered then
-    quarto.log.warning("Both 'centred' and 'centered' are set; using 'centred'.")
+    utils.log_warning(EXTENSION_NAME, "Both 'centred' and 'centered' are set; using 'centred'.")
   end
   if not modal_centred and modal_centered then
     modal_centred = modal_centered
@@ -206,7 +173,7 @@ local function modal(el)
   local found_header, found_hr = false, false
   for _, block in ipairs(el.content) do
     if not found_header and block.t == 'Header' then
-      header_text = stringify(block.content)
+      header_text = utils.stringify(block.content)
       header_level = block.level
       found_header = true
     elseif block.t == 'HorizontalRule' then
@@ -218,21 +185,21 @@ local function modal(el)
     end
   end
 
-  local modal_header_id = header_text and ascii_id(header_text) or "modal-title"
+  local modal_header_id = header_text and utils.ascii_id(header_text) or "modal-title"
 
   local modal_header_html = pandoc.RawBlock('html',
-    raw_header(header_level, header_text, modal_header_id, { 'modal-title' }, nil) ..
+    utils.raw_header(header_level, header_text, modal_header_id, { 'modal-title' }, nil) ..
     '\n' ..
     '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>'
   )
-  local modal_header = pandoc.Div({ modal_header_html }, attr('', { 'modal-header' }))
+  local modal_header = pandoc.Div({ modal_header_html }, utils.attr('', { 'modal-header' }))
 
   local modal_content = { modal_header }
   if #body_blocks > 0 then
-    table.insert(modal_content, pandoc.Div(protect_headers(body_blocks, modal_id), attr('', { 'modal-body' })))
+    table.insert(modal_content, pandoc.Div(protect_headers(body_blocks, modal_id), utils.attr('', { 'modal-body' })))
   end
   if #footer_blocks > 0 then
-    table.insert(modal_content, pandoc.Div(protect_headers(footer_blocks, nil), attr('', { 'modal-footer' })))
+    table.insert(modal_content, pandoc.Div(protect_headers(footer_blocks, nil), utils.attr('', { 'modal-footer' })))
   end
 
 
@@ -257,9 +224,9 @@ local function modal(el)
 
   local modal_structure = pandoc.Div({
     pandoc.Div({
-      pandoc.Div(modal_content, attr('', { 'modal-content' }))
-    }, attr('', dialog_classes))
-  }, attr(modal_id, modal_classes, modal_attrs))
+      pandoc.Div(modal_content, utils.attr('', { 'modal-content' }))
+    }, utils.attr('', dialog_classes))
+  }, utils.attr(modal_id, modal_classes, modal_attrs))
 
   return modal_structure
 end
@@ -267,7 +234,8 @@ end
 return {
   { Meta = get_modal_meta },
   { Div = modal },
-  { Link = function(el)
+  {
+    Link = function(el)
       if el.target and not el.target:match('^#modal%-') then
         return el
       end
@@ -277,5 +245,6 @@ return {
       el.attributes['data-bs-target'] = el.target
       el.attributes['data-bs-toggle'] = 'modal'
       return el
-    end }
+    end
+  }
 }
