@@ -35,6 +35,9 @@ local EXTENSION_NAME = "modal"
 --- Load utils module
 local utils = require(quarto.utils.resolve_path("_modules/utils.lua"):gsub("%.lua$", ""))
 
+--- Load content-extraction module
+local content = require(quarto.utils.resolve_path('_modules/content-extraction.lua'):gsub('%.lua$', ''))
+
 --- Generate unique modal ID
 local modal_count = 0
 local function unique_modal_id()
@@ -66,35 +69,6 @@ local function get_modal_option(key, meta)
   return modal_settings_meta[key] or ""
 end
 
-
----
---- Protects header blocks by converting them to raw HTML and prefixing ids.
----
---- @param blocks table List of Pandoc blocks.
---- @param modal_id string|nil Modal id to prefix header ids.
---- @return table List of protected blocks.
-local function protect_headers(blocks, modal_id)
-  local protected = {}
-  for _, block in ipairs(blocks) do
-    if block.t == 'Header' then
-      local id = block.identifier or ''
-      if id ~= '' and modal_id then
-        id = modal_id .. '-' .. id
-      end
-      local classes = block.classes or {}
-      local attributes = block.attributes or {}
-      table.insert(protected,
-        pandoc.RawBlock(
-          'html',
-          utils.raw_header(block.level, utils.stringify(block.content), id, classes, attributes)
-        )
-      )
-    else
-      table.insert(protected, block)
-    end
-  end
-  return protected
-end
 
 --- Extract and configure modal settings from document metadata.
 ---
@@ -168,22 +142,11 @@ local function modal(el)
   end
 
   --- Parse modal sections
-  local header_text, header_level = nil, 2
-  local body_blocks, footer_blocks = {}, {}
-  local found_header, found_hr = false, false
-  for _, block in ipairs(el.content) do
-    if not found_header and block.t == 'Header' then
-      header_text = utils.stringify(block.content)
-      header_level = block.level
-      found_header = true
-    elseif block.t == 'HorizontalRule' then
-      found_hr = true
-    elseif not found_hr then
-      table.insert(body_blocks, block)
-    else
-      table.insert(footer_blocks, block)
-    end
-  end
+  local parsed = content.parse_sections(el.content)
+  local header_text = parsed.header_text
+  local header_level = parsed.header_level
+  local body_blocks = parsed.body_blocks
+  local footer_blocks = parsed.footer_blocks
 
   local modal_header_id = header_text and utils.ascii_id(header_text) or "modal-title"
 
@@ -196,10 +159,10 @@ local function modal(el)
 
   local modal_content = { modal_header }
   if #body_blocks > 0 then
-    table.insert(modal_content, pandoc.Div(protect_headers(body_blocks, modal_id), utils.attr('', { 'modal-body' })))
+    table.insert(modal_content, pandoc.Div(content.protect_headers(body_blocks, modal_id .. '-', 'html'), utils.attr('', { 'modal-body' })))
   end
   if #footer_blocks > 0 then
-    table.insert(modal_content, pandoc.Div(protect_headers(footer_blocks, nil), utils.attr('', { 'modal-footer' })))
+    table.insert(modal_content, pandoc.Div(content.protect_headers(footer_blocks, '', 'html'), utils.attr('', { 'modal-footer' })))
   end
 
 

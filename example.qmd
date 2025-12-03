@@ -10,7 +10,8 @@ format:
     output-file: index
     toc: true
 filters:
-  - modal
+  - path: modal
+    at: pre-quarto
 extensions:
   modal:
     size: null
