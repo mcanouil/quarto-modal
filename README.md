@@ -20,7 +20,8 @@ To use modals in your HTML Quarto document, you need to include the `modal` exte
 
 ```yaml
 filters:
-  - modal
+  - path: modal
+    at: pre-quarto
 ```
 
 ### Options
