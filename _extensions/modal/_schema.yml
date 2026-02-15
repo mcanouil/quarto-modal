@@ -1,0 +1,94 @@
+# Schema for the modal extension
+# Provides configuration validation and IDE support for options,
+# shortcodes, and element attributes.
+
+options:
+  size:
+    type: string
+    default: ""
+    enum: ["", sm, lg, xl]
+    enum-case-insensitive: true
+    description: "Default modal dialog size."
+  backdrop-static:
+    type: boolean
+    default: false
+    description: "Use a static backdrop that does not close the modal on click."
+  scrollable:
+    type: boolean
+    default: false
+    description: "Make the modal body scrollable when content overflows."
+  keyboard:
+    type: boolean
+    default: true
+    description: "Allow closing the modal with the Escape key."
+  centred:
+    type: boolean
+    default: false
+    aliases: [centered]
+    description: "Vertically centre the modal dialog in the viewport."
+  fade:
+    type: boolean
+    default: false
+    description: "Apply a fade transition when showing and hiding the modal."
+  fullscreen:
+    type: string
+    default: "false"
+    enum: ["false", "true", sm, md, lg, xl, xxl]
+    enum-case-insensitive: true
+    description: "Make the modal fullscreen. Set to a breakpoint (sm, md, lg, xl, xxl) for responsive fullscreen below that breakpoint."
+
+shortcodes:
+  modal:
+    description: "Generate a Bootstrap modal toggle or dismiss button."
+    arguments:
+      - name: type
+        type: string
+        default: "toggle"
+        enum: [toggle, dismiss]
+        description: "Button type: toggle to open, dismiss to close."
+    attributes:
+      target:
+        type: string
+        description: "ID of the modal to target (without the # prefix)."
+      label:
+        type: string
+        description: "Button label text."
+      classes:
+        type: string
+        description: "CSS classes for the button. Defaults to 'btn btn-primary' for toggle buttons."
+      inside:
+        type: boolean
+        default: false
+        description: "For dismiss buttons, whether the button is inside the modal."
+
+element-attributes:
+  _any:
+    size:
+      type: string
+      enum: ["", sm, lg, xl]
+      enum-case-insensitive: true
+      description: "Modal dialog size override."
+    backdrop-static:
+      type: boolean
+      description: "Use a static backdrop for this modal."
+    scrollable:
+      type: boolean
+      description: "Make this modal body scrollable."
+    keyboard:
+      type: boolean
+      description: "Allow closing this modal with the Escape key."
+    centred:
+      type: boolean
+      aliases: [centered]
+      description: "Vertically centre this modal dialog."
+    fade:
+      type: boolean
+      description: "Apply a fade transition for this modal."
+    fullscreen:
+      type: string
+      enum: ["false", "true", sm, md, lg, xl, xxl]
+      enum-case-insensitive: true
+      description: "Make this modal fullscreen or responsive fullscreen."
+    description:
+      type: string
+      description: "Accessible description for the modal (aria-describedby)."
