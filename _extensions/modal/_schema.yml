@@ -62,7 +62,7 @@ shortcodes:
         description: "For dismiss buttons, whether the button is inside the modal."
 
 element-attributes:
-  _any:
+  modal:
     size:
       type: string
       enum: ["", sm, lg, xl]
