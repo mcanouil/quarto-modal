@@ -6,8 +6,9 @@
 --- Extension name constant
 local EXTENSION_NAME = "modal"
 
---- Load utils module
+--- Load utils and schema modules
 local utils = require(quarto.utils.resolve_path("_modules/utils.lua"):gsub("%.lua$", ""))
+local schema = require(quarto.utils.resolve_path("_modules/schema.lua"):gsub("%.lua$", ""))
 
 --- Load content-extraction module
 local content = require(quarto.utils.resolve_path('_modules/content-extraction.lua'):gsub('%.lua$', ''))
@@ -49,6 +50,8 @@ end
 --- @param meta table<string, any> Document metadata table.
 --- @return table<string, any> Updated metadata table with modal configuration.
 local function get_modal_meta(meta)
+  schema.validate_options(meta, EXTENSION_NAME, quarto.utils.resolve_path('_schema.yml'))
+
   local modal_options = {}
   for key, _ in pairs(modal_settings_meta) do
     modal_options[key] = get_modal_option(key, meta)
