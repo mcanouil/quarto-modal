@@ -1,0 +1,29 @@
+{
+	"Toggle button": {
+		"prefix": "modal-toggle",
+		"body": "{{< modal toggle target=${1:modal-id} label=\"${2:Open Modal}\" >}}",
+		"description": "Insert a modal toggle button"
+	},
+	"Dismiss button": {
+		"prefix": "modal-dismiss",
+		"body": "{{< modal dismiss inside=true label=\"${1:Close}\" >}}",
+		"description": "Insert a modal dismiss button (inside a modal)"
+	},
+	"Full modal": {
+		"prefix": "modal",
+		"body": [
+			"{{< modal toggle target=${1:my-modal} label=\"${2:Open Modal}\" >}}",
+			"",
+			":::: {#${1:my-modal} description=\"${3:Modal description}\"}",
+			"## ${4:Modal Title}",
+			"",
+			"${5:Modal body content.}",
+			"",
+			"---",
+			"",
+			"${6:Footer content.}",
+			"::::"
+		],
+		"description": "Full modal structure with toggle button and container"
+	}
+}
