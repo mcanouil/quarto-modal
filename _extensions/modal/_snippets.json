@@ -12,9 +12,9 @@
   "Full modal": {
     "prefix": "modal",
     "body": [
-      "{{< modal toggle target=${1:my-modal} label=\"${2:Open Modal}\" >}}",
+      "{{< modal toggle target=modal-${1:my-modal} label=\"${2:Open Modal}\" >}}",
       "",
-      "::: {#${1:my-modal} description=\"${3:Modal description}\"}",
+      "::: {#modal-${1:my-modal} description=\"${3:Modal description}\"}",
       "## ${4:Modal Title}",
       "",
       "${5:Modal body content.}",
