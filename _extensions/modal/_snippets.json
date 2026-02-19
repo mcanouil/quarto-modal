@@ -1,11 +1,11 @@
 {
 	"Toggle button": {
-		"prefix": "modal-toggle",
+		"prefix": "toggle",
 		"body": "{{< modal toggle target=${1:modal-id} label=\"${2:Open Modal}\" >}}",
 		"description": "Insert a modal toggle button"
 	},
 	"Dismiss button": {
-		"prefix": "modal-dismiss",
+		"prefix": "dismiss",
 		"body": "{{< modal dismiss inside=true label=\"${1:Close}\" >}}",
 		"description": "Insert a modal dismiss button (inside a modal)"
 	},
