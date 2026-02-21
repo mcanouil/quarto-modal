@@ -1,6 +1,6 @@
 # Schema for the modal extension
 # Provides configuration validation and IDE support for options,
-# shortcodes, and element attributes.
+# shortcodes, and attributes.
 
 $schema: https://m.canouil.dev/quarto-wizard/assets/schema/v1/extension-schema.json
 
@@ -63,7 +63,7 @@ shortcodes:
         default: false
         description: "For dismiss buttons, whether the button is inside the modal."
 
-element-attributes:
+attributes:
   modal:
     size:
       type: string
@@ -94,3 +94,7 @@ element-attributes:
     description:
       type: string
       description: "Accessible description for the modal (aria-describedby)."
+
+classes:
+  modal:
+    description: "Bootstrap modal dialog container."
