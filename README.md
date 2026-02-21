@@ -7,7 +7,7 @@ It allows you to define modal buttons and containers using shortcodes, making it
 ## Installation
 
 ```bash
-quarto add mcanouil/quarto-modal@1.3.0
+quarto add mcanouil/quarto-modal@1.3.1
 ```
 
 This will install the extension under the `_extensions` subdirectory.
