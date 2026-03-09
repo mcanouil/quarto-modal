@@ -36,11 +36,12 @@ local modal_settings_meta = {
 --- @param meta table<string, any> Document metadata table.
 --- @return string The option value as a string.
 local function get_modal_option(key, meta)
-  if meta['extensions'] and meta['extensions']['modal'] and meta['extensions']['modal'][key] then
-    return utils.stringify(meta['extensions']['modal'][key])
+  local meta_value = utils.get_metadata_value(meta, 'modal', key)
+  if not utils.is_empty(meta_value) then
+    return meta_value
   end
 
-  return modal_settings_meta[key] or ""
+  return modal_settings_meta[key] or ''
 end
 
 
