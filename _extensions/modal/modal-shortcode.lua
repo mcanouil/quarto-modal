@@ -3,8 +3,8 @@
 --- @copyright 2026 Mickaël Canouil
 --- @author Mickaël Canouil
 
---- Load utils module
-local utils = require(quarto.utils.resolve_path('_modules/utils.lua'):gsub('%.lua$', ''))
+--- Load modules
+local str = require(quarto.utils.resolve_path('_modules/string.lua'):gsub('%.lua$', ''))
 
 --- Generate a Bootstrap modal button for Quarto shortcode.
 --- @param args table List of arguments (first is button type).
@@ -18,11 +18,11 @@ local function modal(args, kwargs, _meta, _raw_args, _context)
     return pandoc.Null()
   end
 
-  local button_type = utils.stringify(args[1]) or 'toggle'
-  local target = utils.stringify(kwargs.target)
-  local label = utils.stringify(kwargs.label)
-  local classes = utils.stringify(kwargs.classes)
-  local inside = utils.stringify(kwargs.inside) == 'true'
+  local button_type = str.stringify(args[1]) or 'toggle'
+  local target = str.stringify(kwargs.target)
+  local label = str.stringify(kwargs.label)
+  local classes = str.stringify(kwargs.classes)
+  local inside = str.stringify(kwargs.inside) == 'true'
 
   if classes == '' then
     if button_type == 'toggle' or label ~= '' then

@@ -6,8 +6,12 @@
 --- Extension name constant
 local EXTENSION_NAME = "modal"
 
---- Load utils module
-local utils = require(quarto.utils.resolve_path("_modules/utils.lua"):gsub("%.lua$", ""))
+--- Load modules
+local str = require(quarto.utils.resolve_path('_modules/string.lua'):gsub('%.lua$', ''))
+local log = require(quarto.utils.resolve_path('_modules/logging.lua'):gsub('%.lua$', ''))
+local meta_mod = require(quarto.utils.resolve_path('_modules/metadata.lua'):gsub('%.lua$', ''))
+local pdoc = require(quarto.utils.resolve_path('_modules/pandoc-helpers.lua'):gsub('%.lua$', ''))
+local html_mod = require(quarto.utils.resolve_path('_modules/html.lua'):gsub('%.lua$', ''))
 
 --- Load content-extraction module
 local content = require(quarto.utils.resolve_path('_modules/content-extraction.lua'):gsub('%.lua$', ''))
@@ -36,8 +40,8 @@ local modal_settings_meta = {
 --- @param meta table<string, any> Document metadata table.
 --- @return string The option value as a string.
 local function get_modal_option(key, meta)
-  local meta_value = utils.get_metadata_value(meta, 'modal', key)
-  if not utils.is_empty(meta_value) then
+  local meta_value = meta_mod.get_metadata_value(meta, 'modal', key)
+  if not str.is_empty(meta_value) then
     return meta_value
   end
 
@@ -90,7 +94,7 @@ local function modal(el)
   local modal_centred = el.attributes.centred or modal_settings_meta["centred"]
   local modal_centered = el.attributes.centered or modal_settings_meta["centered"]
   if el.attributes.centred and el.attributes.centered then
-    utils.log_warning(EXTENSION_NAME, "Both 'centred' and 'centered' are set; using 'centred'.")
+    log.log_warning(EXTENSION_NAME, "Both 'centred' and 'centered' are set; using 'centred'.")
   end
   if not modal_centred and modal_centered then
     modal_centred = modal_centered
@@ -123,21 +127,21 @@ local function modal(el)
   local body_blocks = parsed.body_blocks
   local footer_blocks = parsed.footer_blocks
 
-  local modal_header_id = header_text and utils.ascii_id(header_text) or "modal-title"
+  local modal_header_id = header_text and str.ascii_id(header_text) or "modal-title"
 
   local modal_header_html = pandoc.RawBlock('html',
-    utils.raw_header(header_level, header_text, modal_header_id, { 'modal-title' }, nil) ..
+    html_mod.raw_header(header_level, header_text, modal_header_id, { 'modal-title' }, nil) ..
     '\n' ..
     '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>'
   )
-  local modal_header = pandoc.Div({ modal_header_html }, utils.attr('', { 'modal-header' }))
+  local modal_header = pandoc.Div({ modal_header_html }, pdoc.attr('', { 'modal-header' }))
 
   local modal_content = { modal_header }
   if #body_blocks > 0 then
-    table.insert(modal_content, pandoc.Div(content.protect_headers(body_blocks, modal_id .. '-', 'html'), utils.attr('', { 'modal-body' })))
+    table.insert(modal_content, pandoc.Div(content.protect_headers(body_blocks, modal_id .. '-', 'html'), pdoc.attr('', { 'modal-body' })))
   end
   if #footer_blocks > 0 then
-    table.insert(modal_content, pandoc.Div(content.protect_headers(footer_blocks, '', 'html'), utils.attr('', { 'modal-footer' })))
+    table.insert(modal_content, pandoc.Div(content.protect_headers(footer_blocks, '', 'html'), pdoc.attr('', { 'modal-footer' })))
   end
 
 
@@ -162,9 +166,9 @@ local function modal(el)
 
   local modal_structure = pandoc.Div({
     pandoc.Div({
-      pandoc.Div(modal_content, utils.attr('', { 'modal-content' }))
-    }, utils.attr('', dialog_classes))
-  }, utils.attr(modal_id, modal_classes, modal_attrs))
+      pandoc.Div(modal_content, pdoc.attr('', { 'modal-content' }))
+    }, pdoc.attr('', dialog_classes))
+  }, pdoc.attr(modal_id, modal_classes, modal_attrs))
 
   return modal_structure
 end
