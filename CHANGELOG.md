@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+- fix: Preserve non-modal Divs in filter (return `nil` instead of `pandoc.Null()`), which previously deleted every Div without a `modal-` identifier from the output.
+
 ## 1.4.1 (2026-04-15)
 
 ### Refactoring
