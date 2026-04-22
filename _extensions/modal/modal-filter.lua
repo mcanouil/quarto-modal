@@ -75,7 +75,7 @@ end
 --- @return table|nil Pandoc Div structure for modal, or nil if not applicable.
 local function modal(el)
   if not quarto.doc.is_format("html:js") or not quarto.doc.has_bootstrap() or not (el.identifier:match("^modal%-")) then
-    return pandoc.Null()
+    return nil
   end
 
   quarto.doc.add_html_dependency({
