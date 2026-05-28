@@ -30,7 +30,7 @@ It allows you to define modal buttons and containers using shortcodes, making it
 ## Installation
 
 ```bash
-quarto add mcanouil/quarto-modal@1.4.2
+quarto add mcanouil/quarto-modal@1.5.0
 ```
 
 This will install the extension under the `_extensions` subdirectory.
@@ -519,6 +519,153 @@ This modal has a custom footer.
 {{< modal dismiss target="modal-footer" label="Cancel" >}}
 {{< modal dismiss target="modal-footer" label="OK" >}}
 :::
+
+:::
+```
+
+## Friendly Size Aliases
+
+The `size` attribute accepts both Bootstrap tokens (`sm`, `lg`, `xl`) and friendly aliases (`small`, `medium`, `large`, `extra-large`/`xlarge`).
+Unknown values trigger a warning during rendering and fall back to the default size.
+
+{{< modal toggle target="modal-friendly-size" label="Open Friendly Size Modal" >}}
+
+:::: {#modal-friendly-size size="large"}
+
+## Friendly Size Modal
+
+This modal uses the `large` alias, which resolves to `modal-lg`.
+
+---
+
+{{< modal dismiss target="modal-friendly-size" label="Close" >}}
+
+:::
+
+```{.markdown shortcodes=false}
+{{< modal toggle target="modal-friendly-size" label="Open Friendly Size Modal" >}}
+
+:::: {#modal-friendly-size size="large"}
+
+## Friendly Size Modal
+
+This modal uses the `large` alias, which resolves to `modal-lg`.
+
+---
+
+{{< modal dismiss target="modal-friendly-size" label="Close" >}}
+
+:::
+```
+
+## Customising the Close Button
+
+Set `close-button="false"` to hide the default close button in the modal header.
+Use `close-button-label="..."` to override the `aria-label` text, which is useful for localisation.
+
+{{< modal toggle target="modal-close-custom" label="Open Modal With Custom Close" >}}
+
+:::: {#modal-close-custom close-button-label="Fermer"}
+
+## Custom Close Label
+
+The close button in the header uses a translated `aria-label`.
+
+---
+
+{{< modal dismiss target="modal-close-custom" label="Fermer" >}}
+
+:::
+
+```{.markdown shortcodes=false}
+{{< modal toggle target="modal-close-custom" label="Open Modal With Custom Close" >}}
+
+:::: {#modal-close-custom close-button-label="Fermer"}
+
+## Custom Close Label
+
+The close button in the header uses a translated `aria-label`.
+
+---
+
+{{< modal dismiss target="modal-close-custom" label="Fermer" >}}
+
+:::
+```
+
+{{< modal toggle target="modal-no-close" label="Open Modal Without Header Close" >}}
+
+:::: {#modal-no-close close-button="false"}
+
+## No Header Close
+
+The header close button is suppressed; users dismiss the modal via the footer.
+
+---
+
+{{< modal dismiss target="modal-no-close" label="Close" >}}
+
+:::
+
+```{.markdown shortcodes=false}
+{{< modal toggle target="modal-no-close" label="Open Modal Without Header Close" >}}
+
+:::: {#modal-no-close close-button="false"}
+
+## No Header Close
+
+The header close button is suppressed; users dismiss the modal via the footer.
+
+---
+
+{{< modal dismiss target="modal-no-close" label="Close" >}}
+
+:::
+```
+
+## Accessible Description
+
+The `description` attribute sets `aria-describedby` on the modal and must reference the identifier of an element present elsewhere in the document.
+A warning is emitted when the referenced identifier cannot be resolved.
+
+::: {#described-modal-note}
+
+The modal below references this paragraph for its accessible description.
+
+:::
+
+{{< modal toggle target="modal-described" label="Open Described Modal" >}}
+
+:::: {#modal-described description="described-modal-note"}
+
+## Described Modal
+
+This modal exposes an extended description via `aria-describedby`.
+
+---
+
+{{< modal dismiss target="modal-described" label="Close" >}}
+
+:::
+
+```{.markdown shortcodes=false}
+::: {#described-modal-note}
+
+The modal below references this paragraph for its accessible description.
+
+:::
+
+{{< modal toggle target="modal-described" label="Open Described Modal" >}}
+
+:::: {#modal-described description="described-modal-note"}
+
+## Described Modal
+
+This modal exposes an extended description via `aria-describedby`.
+
+---
+
+{{< modal dismiss target="modal-described" label="Close" >}}
 
 :::
 ```
