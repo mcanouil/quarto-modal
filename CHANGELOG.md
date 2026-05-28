@@ -2,8 +2,6 @@
 
 ## Unreleased
 
-## 1.5.0 (2026-05-28)
-
 ### New Features
 
 - feat: Add friendly `size` aliases (`small`, `medium`/`default`, `large`, `extra-large`/`xlarge`) and warn on unknown values.
