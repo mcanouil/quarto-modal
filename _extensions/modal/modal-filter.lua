@@ -80,13 +80,9 @@ local MODAL_ATTRIBUTE_HINTS = {
 }
 
 --- Set of identifiers present anywhere in the document.
---- Populated during the Meta pass before Div processing.
+--- Populated during the Pandoc pass before Div processing.
 --- @type table<string, boolean>
 local document_ids = {}
-
---- Set of modal identifiers (after Div processing) used by Link expansion.
---- @type table<string, boolean>
-local modal_ids = {}
 
 --- Get modal option from metadata.
 --- @param key string The option name to retrieve.
@@ -131,52 +127,27 @@ end
 --- @param doc table Pandoc Pandoc element.
 local function collect_document_ids(doc)
   document_ids = {}
-  pandoc.walk_block(pandoc.Div(doc.blocks), {
-    Div = function(el)
-      if el.identifier and el.identifier ~= '' then
-        document_ids[el.identifier] = true
-      end
-    end,
-    Header = function(el)
-      if el.identifier and el.identifier ~= '' then
-        document_ids[el.identifier] = true
-      end
-    end,
-    Span = function(el)
-      if el.identifier and el.identifier ~= '' then
-        document_ids[el.identifier] = true
-      end
-    end,
-    Link = function(el)
-      if el.identifier and el.identifier ~= '' then
-        document_ids[el.identifier] = true
-      end
-    end,
-    Image = function(el)
-      if el.identifier and el.identifier ~= '' then
-        document_ids[el.identifier] = true
-      end
-    end,
-    CodeBlock = function(el)
-      if el.identifier and el.identifier ~= '' then
-        document_ids[el.identifier] = true
-      end
-    end,
-    Table = function(el)
-      if el.identifier and el.identifier ~= '' then
-        document_ids[el.identifier] = true
-      end
+  local function record(el)
+    if el.identifier and el.identifier ~= '' then
+      document_ids[el.identifier] = true
     end
+  end
+  pandoc.walk_block(pandoc.Div(doc.blocks), {
+    Div = record,
+    Header = record,
+    Span = record,
+    Link = record,
+    Image = record,
+    CodeBlock = record,
+    Table = record
   })
 end
-
 
 --- Extract and configure modal settings from document metadata.
 ---
 --- @param doc table Pandoc Pandoc element.
 --- @return table Updated Pandoc Pandoc element.
 local function get_modal_meta(doc)
-  modal_ids = {}
   local meta = doc.meta
   local modal_options = {}
   for key, _ in pairs(modal_settings_meta) do
@@ -264,7 +235,6 @@ local function modal(el)
   })
 
   local modal_id = el.identifier ~= '' and el.identifier or unique_modal_id()
-  modal_ids[modal_id] = true
 
   local raw_size = el.attributes.size or modal_settings_meta["size"]
   local modal_size = resolve_size(raw_size)
@@ -282,16 +252,8 @@ local function modal(el)
   local modal_fade = el.attributes.fade or modal_settings_meta["fade"]
   local modal_fullscreen = el.attributes.fullscreen or modal_settings_meta["fullscreen"]
 
-  local size_class = ''
-  if modal_size == 'lg' then
-    size_class = 'modal-lg'
-  elseif modal_size == 'sm' then
-    size_class = 'modal-sm'
-  elseif modal_size == 'xl' then
-    size_class = 'modal-xl'
-  end
   local dialog_classes = { 'modal-dialog' }
-  if size_class ~= '' then table.insert(dialog_classes, size_class) end
+  if modal_size ~= '' then table.insert(dialog_classes, 'modal-' .. modal_size) end
   if modal_scrollable == 'true' then table.insert(dialog_classes, 'modal-dialog-scrollable') end
   if modal_centred == 'true' then table.insert(dialog_classes, 'modal-dialog-centered') end
   if modal_fullscreen == 'true' then
@@ -347,7 +309,6 @@ local function modal(el)
   if #footer_blocks > 0 then
     table.insert(modal_content, pandoc.Div(content.protect_headers(footer_blocks, '', 'html'), pdoc.attr('', { 'modal-footer' })))
   end
-
 
   local modal_description = el.attributes.description
   local modal_attrs = {
