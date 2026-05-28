@@ -8,9 +8,9 @@ options:
   size:
     type: string
     default: ""
-    enum: ["", sm, lg, xl]
+    enum: ["", sm, lg, xl, small, medium, default, large, extra-large, xlarge]
     enum-case-insensitive: true
-    description: "Default modal dialog size."
+    description: "Default modal dialog size. Friendly aliases small/medium/large/extra-large resolve to sm/(default)/lg/xl."
   backdrop-static:
     type: boolean
     default: false
@@ -67,9 +67,9 @@ attributes:
   modal:
     size:
       type: string
-      enum: ["", sm, lg, xl]
+      enum: ["", sm, lg, xl, small, medium, default, large, extra-large, xlarge]
       enum-case-insensitive: true
-      description: "Modal dialog size override."
+      description: "Modal dialog size override. Friendly aliases small/medium/large/extra-large resolve to sm/(default)/lg/xl."
     backdrop-static:
       type: boolean
       description: "Use a static backdrop for this modal."
@@ -93,7 +93,15 @@ attributes:
       description: "Make this modal fullscreen or responsive fullscreen."
     description:
       type: string
-      description: "Accessible description for the modal (aria-describedby)."
+      description: "Accessible description for the modal (aria-describedby). Must reference the identifier of an element present elsewhere in the document; a warning is emitted otherwise."
+    close-button:
+      type: boolean
+      default: true
+      description: "Whether to render the Bootstrap close button in the modal header."
+    close-button-label:
+      type: string
+      default: "Close"
+      description: "Accessible label (aria-label) for the close button in the modal header."
 
 classes:
   modal:
