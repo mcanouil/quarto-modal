@@ -75,6 +75,7 @@ Or rely on the extension to automatically expand to the correct HTML syntax:
 
 > [!Important]
 > The identifier needs to start with `modal-` to be recognised by the extension as a modal container.
+> A warning is emitted when a Div carries modal-specific attributes but its identifier is missing the prefix.
 
 ```{.markdown shortcodes=false}
 :::: {#modal-<id> description="<accessibility-description>" <options>}
@@ -87,6 +88,15 @@ Body content goes here.
 Footer content goes here.
 :::
 ```
+
+The `size` attribute accepts the Bootstrap tokens (`sm`, `lg`, `xl`) and friendly aliases (`small`, `medium`/`default`, `large`, `extra-large`/`xlarge`).
+Unknown values emit a warning and fall back to the default size.
+
+The `description` attribute sets `aria-describedby` and must reference an element present elsewhere in the document; otherwise a warning is emitted.
+
+Add `close-button="false"` to suppress the close button rendered in the modal header, or `close-button-label="..."` to override its `aria-label`.
+
+Nested modal containers are detected during rendering and trigger a warning: Bootstrap does not support modal nesting.
 
 ## Example
 
