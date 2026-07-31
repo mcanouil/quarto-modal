@@ -1,8 +1,8 @@
 # Modal Extension For Quarto
 
-This Quarto extension provides a simple way to create Bootstrap modals in your HTML documents.
+`modal` is an extension for Quarto that builds Bootstrap modals from a div and a shortcode, so the dialog and its content stay markdown.
 
-It allows you to define modal buttons and containers using shortcodes, making it easy to integrate modals into your content.
+Modals are only available for HTML formats that carry Bootstrap.
 
 ## Installation
 
@@ -14,94 +14,12 @@ This will install the extension under the `_extensions` subdirectory.
 
 If you're using version control, you will want to check in this directory.
 
-## Usage
+## Documentation
 
-To use modals in your HTML Quarto document, you need to include the `modal` extension in your YAML header.
+The full documentation lives at <https://m.canouil.dev/quarto-modal/>: every dialog option, the button and link forms, the accessibility attributes, and modals you can open.
 
-```yaml
-filters:
-  - path: modal
-    at: pre-quarto
-```
+[`example.qmd`](example.qmd) is a short, standalone starting point you can copy.
 
-### Options
+## Licence
 
-You can customise the modals generally by setting options in the `extensions.modal` section of your YAML header.
-
-```yaml
-extensions:
-  modal:
-    size: null|sm|lg|xl
-    backdrop-static: false|true
-    scrollable: false|true
-    keyboard: true|false
-    centred: false|true
-    fade: false|true
-    fullscreen: false|true|sm|md|lg|xl|xxl
-```
-
-### Modal Structure
-
-Modals are structured using a toggle button and a modal container.
-
-#### Modal Button
-
-- Use `{{< modal toggle ... >}}` to create a button that opens a modal.
-- Use `{{< modal dismiss ... >}}` to create a button that closes a modal.
-- Named arguments:
-  - `target`: the modal's unique identifier required unless `inside=true`.
-  - `label`: the button text.
-  - `classes`: custom CSS classes for the button, e.g., `btn btn-primary`.
-  - `inside`: set to `true` if the dismiss button is inside the modal to be dismissed.
-
-```{.markdown shortcodes=false}
-{{< modal <toggle|dismiss> target=<modal-id> label=<label> classes=<classes> inside=<boolean> >}}
-```
-
-Alternatively, you can use the `bs-target` and `bs-toggle` attributes directly.
-
-```markdown
-[Button Text]{bs-target="#<modal-id>" bs-toggle="modal"}
-[Button Text](#<modal-id>){bs-toggle="modal"}
-```
-
-Or rely on the extension to automatically expand to the correct HTML syntax:
-
-```markdown
-[Button Text](#<modal-id>)
-```
-
-#### Modal Container
-
-> [!Important]
-> The identifier needs to start with `modal-` to be recognised by the extension as a modal container.
-> A warning is emitted when a Div carries modal-specific attributes but its identifier is missing the prefix.
-
-```{.markdown shortcodes=false}
-:::: {#modal-<id> description="<accessibility-description>" <options>}
-## Modal Title
-
-Body content goes here.
-
----
-
-Footer content goes here.
-:::
-```
-
-The `size` attribute accepts the Bootstrap tokens (`sm`, `lg`, `xl`) and friendly aliases (`small`, `medium`/`default`, `large`, `extra-large`/`xlarge`).
-Unknown values emit a warning and fall back to the default size.
-
-The `description` attribute sets `aria-describedby` and must reference an element present elsewhere in the document; otherwise a warning is emitted.
-
-Add `close-button="false"` to suppress the close button rendered in the modal header, or `close-button-label="..."` to override its `aria-label`.
-
-Nested modal containers are detected during rendering and trigger a warning: Bootstrap does not support modal nesting.
-
-## Example
-
-Here is the source code for a minimal example: [example.qmd](example.qmd).
-
-Output of `example.qmd`:
-
-- [HTML](https://m.canouil.dev/quarto-modal/)
+[MIT](https://github.com/mcanouil/quarto-modal?tab=MIT-1-ov-file#readme).

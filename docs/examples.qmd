@@ -1,0 +1,182 @@
+---
+title: "Examples"
+subtitle: "Modals you can open."
+description: "Working Bootstrap modals built by the extension, one per option, with the source alongside each."
+---
+
+Every button below opens a modal built by the extension as this page was rendered.
+
+This site sets two defaults for all of them, in `_quarto.yml`:
+
+```yaml
+extensions:
+  modal:
+    fade: true
+    centred: true
+```
+
+Individual modals below override those.
+
+## A modal with a footer
+
+The first heading becomes the title, and a horizontal rule separates the footer from the body.
+
+````markdown
+{{{< modal toggle target=modal-basic label="Open the basic modal" >}}}
+
+::: {#modal-basic}
+## A basic modal
+
+The body, written as ordinary markdown, so a [link](https://quarto.org) or a
+list works as it would anywhere else.
+
+---
+
+{{{< modal dismiss inside=true label="Close" >}}}
+:::
+````
+
+{{< modal toggle target=modal-basic label="Open the basic modal" >}}
+
+::: {#modal-basic}
+## A basic modal
+
+The body, written as ordinary markdown, so a [link](https://quarto.org) or a list works as it would anywhere else.
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+:::
+
+The dismiss button sits inside the modal it closes, so it uses `inside=true` rather than naming a target.
+
+## Sizes
+
+`size` takes the Bootstrap tokens or the friendly aliases.
+
+{{< modal toggle target=modal-small label="Small" classes="btn btn-outline-primary" >}}
+{{< modal toggle target=modal-large label="Large" classes="btn btn-outline-primary" >}}
+{{< modal toggle target=modal-xl label="Extra large" classes="btn btn-outline-primary" >}}
+
+::: {#modal-small size=small}
+## Small
+
+`size=small`, which resolves to the Bootstrap `sm` token.
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+:::
+
+::: {#modal-large size=lg}
+## Large
+
+`size=lg`.
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+:::
+
+::: {#modal-xl size=extra-large}
+## Extra large
+
+`size=extra-large`, which resolves to `xl`.
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+:::
+
+```markdown
+::: {#modal-small size=small}
+::: {#modal-large size=lg}
+::: {#modal-xl size=extra-large}
+```
+
+## Scrolling, fullscreen, and a static backdrop
+
+{{< modal toggle target=modal-scrollable label="Scrollable" classes="btn btn-outline-primary" >}}
+{{< modal toggle target=modal-fullscreen label="Fullscreen below lg" classes="btn btn-outline-primary" >}}
+{{< modal toggle target=modal-static label="Static backdrop" classes="btn btn-outline-primary" >}}
+
+::: {#modal-scrollable scrollable=true}
+## Scrollable
+
+The body scrolls rather than the page behind it.
+
+{{< lipsum 3 >}}
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+:::
+
+::: {#modal-fullscreen fullscreen=lg}
+## Fullscreen below a breakpoint
+
+`fullscreen=lg` fills the screen on anything narrower than the large breakpoint, and behaves normally above it.
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+:::
+
+::: {#modal-static backdrop-static=true keyboard=false}
+## Static backdrop
+
+`backdrop-static=true` keeps this open when the backdrop is clicked, and `keyboard=false` stops <kbd>Esc</kbd> from closing it.
+The close button is the way out.
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+:::
+
+```markdown
+::: {#modal-scrollable scrollable=true}
+::: {#modal-fullscreen fullscreen=lg}
+::: {#modal-static backdrop-static=true keyboard=false}
+```
+
+## Opening a modal from a link
+
+A link whose target is a modal identifier is expanded into a toggle, so a modal can be opened from the middle of a sentence, [like this one](#modal-basic).
+
+```markdown
+[like this one](#modal-basic)
+```
+
+The explicit Bootstrap attributes work too, when a link would be the wrong element:
+
+```markdown
+[Open it]{bs-target="#modal-basic" bs-toggle="modal"}
+```
+
+## Accessibility
+
+`description` points at the identifier of an element elsewhere on the page, and becomes the modal's `aria-describedby`.
+
+{{< modal toggle target=modal-described label="Described modal" classes="btn btn-outline-primary" >}}
+
+::: {#modal-described description="described-note" close-button-label="Dismiss this dialog"}
+## A described modal
+
+`close-button-label` renames the header's close button for screen readers.
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+:::
+
+[This paragraph carries the identifier the modal points at.]{#described-note}
+
+```markdown
+::: {#modal-described description="described-note" close-button-label="Dismiss this dialog"}
+```
+
+The identifier has to exist in the document; the extension warns when it does not, since a dangling `aria-describedby` is worse than none.
+
+## Source
+
+The repository ships a short, standalone starting point you can copy: [`example.qmd`](https://github.com/mcanouil/quarto-modal/blob/main/example.qmd).
