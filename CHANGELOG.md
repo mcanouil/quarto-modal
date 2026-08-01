@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+- fix: Honour a document-level option written as a bare YAML `false`, such as `keyboard: false`. The value was read as an absent option, so the default applied instead and the setting never reached the dialog.
+
 ### Documentation
 
 - docs: Add a documentation website under `docs/`, built on the `atelier` project type and published to <https://m.canouil.dev/quarto-modal/>.
