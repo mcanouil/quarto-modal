@@ -1,0 +1,129 @@
+---
+title: "Reference"
+subtitle: "Every option the modal extension accepts."
+description: "The complete modal configuration: the container div, the toggle and dismiss shortcodes, the link forms, every dialog option, and the validation rules."
+---
+
+## Enabling the filter
+
+```yaml
+filters:
+  - path: modal
+    at: pre-quarto
+```
+
+## The container
+
+A div whose identifier starts with `modal-` becomes a dialog.
+
+```markdown
+::: {#modal-example description="modal-example-note" size=lg}
+## The title
+
+The body.
+
+---
+
+The footer.
+:::
+```
+
+| Part | Comes from |
+| --- | --- |
+| Title | The first heading in the div. |
+| Body | Everything between the heading and the first horizontal rule. |
+| Footer | Everything after the first horizontal rule, if there is one. |
+
+: How the container is divided. {.striped .hover tbl-colwidths="[18,82]"}
+
+::: {.callout-important}
+The `modal-` prefix is required.
+A div carrying modal attributes without it is left alone, and the extension warns, since that is nearly always a typo rather than an intention.
+:::
+
+## Buttons
+
+```markdown
+{{{< modal toggle target=<modal-id> label=<label> classes=<classes> >}}}
+{{{< modal dismiss target=<modal-id> label=<label> >}}}
+{{{< modal dismiss inside=true label=<label> >}}}
+```
+
+| Argument | Type | Default | Description |
+| --- | --- | --- | --- |
+| type | `toggle` or `dismiss` | `toggle` | Whether the button opens a modal or closes one. |
+| `target` | string | | The identifier of the modal to act on, written without the `#`. Required unless `inside=true`. |
+| `label` | string | | The button text. |
+| `classes` | string | see below | The button's CSS classes. |
+| `inside` | boolean | `false` | For a dismiss button placed inside the modal it closes, so no target is needed. |
+
+: The `modal` shortcode. {.striped .hover tbl-colwidths="[13,17,15,55]"}
+
+Left unset, `classes` is `btn btn-primary` for a toggle button and for any dismiss button that carries a `label`.
+A dismiss button with no label gets `btn-close` instead, which is Bootstrap's bare cross.
+
+A plain link to a modal identifier works too, and is expanded for you:
+
+```markdown
+[Open it](#modal-example)
+[Open it]{bs-target="#modal-example" bs-toggle="modal"}
+[Open it](#modal-example){bs-toggle="modal"}
+```
+
+## Dialog options
+
+The same names work as project or document metadata, and as attributes on an individual container, where they win.
+
+```yaml
+extensions:
+  modal:
+    size: lg
+    fade: true
+    centred: true
+```
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | string | | Dialog width. `sm`, `lg`, `xl`, or the aliases `small`, `medium`, `default`, `large`, `extra-large`, `xlarge`. |
+| `fullscreen` | string | `false` | `true` for always fullscreen, or a breakpoint (`sm`, `md`, `lg`, `xl`, `xxl`) for fullscreen below it. |
+| `centred` | boolean | `false` | Centres the dialog vertically. |
+| `scrollable` | boolean | `false` | Scrolls the body rather than the page when the content overflows. |
+| `fade` | boolean | `false` | Fades the dialog in and out. |
+| `backdrop-static` | boolean | `false` | Keeps the modal open when the backdrop is clicked. |
+| `keyboard` | boolean | `true` | Allows <kbd>Esc</kbd> to close the modal. |
+
+: Dialog options. {.striped .hover tbl-colwidths="[17,12,11,60]"}
+
+::: {.callout-caution}
+`centred` is spelled the British way, and only that spelling reaches the dialog.
+`centered` written on its own is read as an ordinary attribute and does nothing, with no warning; written alongside `centred` it warns and is discarded.
+:::
+
+### Container-only attributes
+
+| Attribute | Type | Default | Description |
+| --- | --- | --- | --- |
+| `description` | string | | The identifier of an element elsewhere in the document that describes this modal, wired up as `aria-describedby`. |
+| `close-button` | boolean | `true` | Whether the header carries a close button. |
+| `close-button-label` | string | `Close` | The `aria-label` of that close button. |
+
+: Attributes accepted on the container only. {.striped .hover tbl-colwidths="[20,12,11,57]"}
+
+## Validation
+
+| Rule | On failure |
+| --- | --- |
+| `size` is a known token or alias. | Warns, and the default width is used. |
+| `fullscreen` is `true`, `false`, or a breakpoint. | Warns, and the modal is not fullscreen. |
+| `description` names an identifier that exists in the document. | Warns, and the attribute is still written. |
+| A modal contains no other modal. | Warns. Bootstrap does not support nesting, and focus and backdrop handling break. |
+| A div with modal attributes carries the `modal-` prefix. | Warns, and the div is left as an ordinary div. |
+| `centred` and `centered` are not both set. | Warns, and `centred` is used. |
+
+: Validation rules and what happens when a value fails them. {.striped .hover tbl-colwidths="[55,45]"}
+
+## Limitations
+
+- HTML with JavaScript and Bootstrap only. Where Bootstrap is absent the container stays an ordinary div, content and all, and the buttons render nothing.
+- Modals cannot be nested, which is a Bootstrap constraint rather than an extension one.
+- A modal needs a heading to take its title from, and a horizontal rule to separate a footer from the body.
