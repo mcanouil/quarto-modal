@@ -8,8 +8,7 @@ description: "The complete modal configuration: the container div, the toggle an
 
 ```yaml
 filters:
-  - path: modal
-    at: pre-quarto
+  - modal
 ```
 
 ## The container

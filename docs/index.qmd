@@ -40,8 +40,7 @@ Enable the filter:
 
 ```yaml
 filters:
-  - path: modal
-    at: pre-quarto
+  - modal
 ```
 
 Then write the container and a button that opens it:

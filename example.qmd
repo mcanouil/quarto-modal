@@ -9,8 +9,7 @@ format:
   html:
     toc: true
 filters:
-  - path: modal
-    at: pre-quarto
+  - modal
 extensions:
   modal:
     fade: true
