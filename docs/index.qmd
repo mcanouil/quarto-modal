@@ -75,8 +75,8 @@ See the [Reference](reference.qmd) for every option, and the [Examples](examples
 HTML formats that carry JavaScript **and** Bootstrap, which is Quarto's default `html` and its website and book projects.
 
 ::: {.callout-note}
-Where Bootstrap is absent, `revealjs` among others, the filter leaves the document alone: the container renders as an ordinary div and the button as ordinary text.
-Nothing breaks, and nothing pops up.
+Where Bootstrap is absent, `revealjs` among others, the container renders as an ordinary div, so its content stays in the flow of the page, and the buttons render nothing at all.
+Nothing breaks, but write the container so it reads sensibly when it is not a dialog.
 :::
 
 ## Links
