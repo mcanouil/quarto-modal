@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.5.1 (2026-08-01)
+
 ### Bug Fixes
 
 - fix: Honour a document-level option written as a bare YAML `false`, such as `keyboard: false`. The value was read as an absent option, so the default applied instead and the setting never reached the dialog.
