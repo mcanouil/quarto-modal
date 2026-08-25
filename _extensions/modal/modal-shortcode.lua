@@ -1,4 +1,4 @@
---- @module modal-shortcode
+--- @module "modal-shortcode"
 --- @license MIT
 --- @copyright 2026 Mickaël Canouil
 --- @author Mickaël Canouil

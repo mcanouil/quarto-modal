@@ -1,4 +1,4 @@
---- @module modal-filter
+--- @module "modal-filter"
 --- @license MIT
 --- @copyright 2026 Mickaël Canouil
 --- @author Mickaël Canouil
