@@ -4,7 +4,7 @@
 
 ### New Features
 
-- feat: Check the document configuration and each shortcode call against the extension schema, and report what it does not accept.
+- feat: Check the document configuration and each shortcode call against the extension schema, and report what it does not accept. (#37)
 
 ## 1.5.2 (2026-08-01)
 
