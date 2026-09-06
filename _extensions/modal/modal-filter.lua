@@ -16,6 +16,24 @@ local html_mod = require(quarto.utils.resolve_path('_vendor/quarto-lua-modules/h
 --- Load content-extraction module
 local content = require(quarto.utils.resolve_path('_vendor/quarto-lua-modules/content-extraction.lua'):gsub('%.lua$', ''))
 
+local schema = require(quarto.utils.resolve_path('_vendor/quarto-wizard/schema.lua'):gsub('%.lua$', ''))
+local check = require(quarto.utils.resolve_path('_vendor/quarto-lua-modules/schema-check.lua'):gsub('%.lua$', ''))
+
+--- The schema check, built once for this filter. It reads `_schema.yml` on the
+--- way in and checks the document configuration against it.
+---
+--- The validator is injected rather than required by the check module, so the
+--- two vendored sources stay independent of where the other was placed.
+---
+--- The extension contributes a filter and a shortcode, and each entry point
+--- builds its own checker. The document configuration is checked here, from the
+--- `Meta` handler, which runs before the shortcodes expand at the `pre-quarto`
+--- stage. Each shortcode call is checked in `modal-shortcode.lua`.
+---
+--- A schema that cannot be read is reported by the module as an error and the
+--- render carries on: a configuration file must not stop a document.
+local checker = check.new(schema, EXTENSION_NAME)
+
 --- Generate unique modal ID
 local modal_count = 0
 local function unique_modal_id()
@@ -370,7 +388,17 @@ local function expand_modal_link(el)
   return el
 end
 
+--- Check the document configuration against the extension schema.
+--- Runs before ``get_modal_meta`` replaces ``extensions.modal`` with the
+--- resolved settings, so the check reads what the author wrote.
+--- @param meta table Pandoc document metadata.
+--- @return nil Metadata is never modified by the check.
+local function check_document_options(meta)
+  checker:options(meta)
+end
+
 return {
+  { Meta = check_document_options },
   { Pandoc = get_modal_meta },
   { Div = modal },
   { Link = expand_modal_link }
