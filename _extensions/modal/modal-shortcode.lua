@@ -4,7 +4,7 @@
 --- @author Mickaël Canouil
 
 --- Load modules
-local str = require(quarto.utils.resolve_path('_modules/string.lua'):gsub('%.lua$', ''))
+local str = require(quarto.utils.resolve_path('_vendor/quarto-lua-modules/string.lua'):gsub('%.lua$', ''))
 
 --- Generate a Bootstrap modal button for Quarto shortcode.
 --- @param args table List of arguments (first is button type).
