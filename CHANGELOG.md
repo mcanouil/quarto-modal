@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+- fix: The `modal` shortcode no longer stops the render when it is called with no button type. It applies the documented `toggle` default. (#41)
+
 ## 1.6.0 (2026-09-07)
 
 ### New Features
