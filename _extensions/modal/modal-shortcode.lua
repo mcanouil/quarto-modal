@@ -40,7 +40,7 @@ local function modal(args, kwargs, _meta, _raw_args, _context)
     return pandoc.Null()
   end
 
-  local button_type = str.stringify(args[1]) or 'toggle'
+  local button_type = #args > 0 and str.stringify(args[1]) or 'toggle'
   local target = str.stringify(kwargs.target)
   local label = str.stringify(kwargs.label)
   local classes = str.stringify(kwargs.classes)
