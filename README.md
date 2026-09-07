@@ -7,7 +7,7 @@ Modals are only available for HTML formats that carry Bootstrap.
 ## Installation
 
 ```bash
-quarto add mcanouil/quarto-modal@1.5.2
+quarto add mcanouil/quarto-modal@1.6.0
 ```
 
 This will install the extension under the `_extensions` subdirectory.
