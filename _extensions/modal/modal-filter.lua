@@ -281,11 +281,11 @@ local function modal(el)
   local modal_backdrop_static = resolved_flag(resolved["backdrop-static"], modal_settings_meta["backdrop-static"])
   local modal_scrollable = resolved_flag(resolved.scrollable, modal_settings_meta["scrollable"])
   local modal_keyboard = resolved_flag(resolved.keyboard, modal_settings_meta["keyboard"])
+  -- The schema check already names the same conflict, from `centred`'s
+  -- `aliases: [centered]` declaration, so this stays quiet and only applies
+  -- the "centred wins" precedence.
   local modal_centred = el.attributes.centred or modal_settings_meta["centred"]
   local modal_centered = el.attributes.centered or modal_settings_meta["centered"]
-  if el.attributes.centred and el.attributes.centered then
-    log.log_warning(EXTENSION_NAME, "Both 'centred' and 'centered' are set; using 'centred'.")
-  end
   if not modal_centred and modal_centered then
     modal_centred = modal_centered
   end
@@ -296,16 +296,13 @@ local function modal(el)
   if modal_size ~= '' then table.insert(dialog_classes, 'modal-' .. modal_size) end
   if modal_scrollable == 'true' then table.insert(dialog_classes, 'modal-dialog-scrollable') end
   if modal_centred == 'true' then table.insert(dialog_classes, 'modal-dialog-centered') end
+  -- An unknown value falls back to no fullscreen; the schema check already
+  -- names the same mistake, so this stays quiet and only applies the
+  -- fallback.
   if modal_fullscreen == 'true' then
     table.insert(dialog_classes, 'modal-fullscreen')
   elseif modal_fullscreen and FULLSCREEN_BREAKPOINTS[modal_fullscreen] then
     table.insert(dialog_classes, 'modal-fullscreen-' .. modal_fullscreen .. '-down')
-  elseif modal_fullscreen and modal_fullscreen ~= 'false' and modal_fullscreen ~= '' then
-    log.log_warning(
-      EXTENSION_NAME,
-      "Unknown 'fullscreen' value '" .. modal_fullscreen .. "' on modal '" .. modal_id .. "'. " ..
-      "Expected one of: false, true, sm, md, lg, xl, xxl. Falling back to no fullscreen."
-    )
   end
 
   --- Parse modal sections
