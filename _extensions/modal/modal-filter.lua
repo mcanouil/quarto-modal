@@ -160,6 +160,22 @@ local function resolved_flag(value, fallback)
   return value
 end
 
+--- Read a schema-resolved string attribute, guarding its Lua type.
+--- `fullscreen` is declared `type: string`, so a value the document wrote
+--- stays a string whether the schema accepts or rejects it; nothing here
+--- coerces it to another type. The guard exists so that a value of any
+--- other type, however it might arrive, cannot flow into the string-only
+--- comparisons this filter makes against it.
+--- @param value any Schema-resolved attribute value.
+--- @param fallback string The document option to use when unset or wrong-typed.
+--- @return string
+local function resolved_string(value, fallback)
+  if value == nil or type(value) ~= 'string' then
+    return fallback
+  end
+  return value
+end
+
 --- Collect every identifier appearing anywhere in the document.
 --- Walks Pandoc blocks and inlines exactly once so later validations
 --- (e.g. ``description`` references) can resolve targets cheaply.
@@ -281,16 +297,26 @@ local function modal(el)
   local modal_backdrop_static = resolved_flag(resolved["backdrop-static"], modal_settings_meta["backdrop-static"])
   local modal_scrollable = resolved_flag(resolved.scrollable, modal_settings_meta["scrollable"])
   local modal_keyboard = resolved_flag(resolved.keyboard, modal_settings_meta["keyboard"])
-  -- The schema check already names the same conflict, from `centred`'s
-  -- `aliases: [centered]` declaration, so this stays quiet and only applies
-  -- the "centred wins" precedence.
-  local modal_centred = el.attributes.centred or modal_settings_meta["centred"]
-  local modal_centered = el.attributes.centered or modal_settings_meta["centered"]
-  if not modal_centred and modal_centered then
-    modal_centred = modal_centered
+  -- `centred` declares `aliases: [centered]` in the schema, so the merge
+  -- inside `checker:attributes` already moves a document-written `centered`
+  -- into `resolved.centred`, with the declared spelling winning when both
+  -- are written (the schema check already names that conflict), and always
+  -- empties `resolved.centered`.
+  --
+  -- `modal_settings_meta["centred"]` is never a falsy Lua value, at minimum
+  -- the string `"false"`, so `el.attributes.centred or modal_settings_meta["centred"]`
+  -- was never nil or false either, which made the "no centred, fall back to
+  -- centered" branch below unreachable: a document that wrote only
+  -- `centered` has never actually applied it here. That is a pre-existing
+  -- condition, not something this change fixes, so presence-testing
+  -- `el.attributes.centred` keeps it exactly as it was rather than letting
+  -- the schema's alias merge quietly start honouring `centered` alone.
+  local modal_centred = modal_settings_meta["centred"]
+  if el.attributes.centred ~= nil then
+    modal_centred = resolved_flag(resolved.centred, modal_settings_meta["centred"])
   end
-  local modal_fade = el.attributes.fade or modal_settings_meta["fade"]
-  local modal_fullscreen = el.attributes.fullscreen or modal_settings_meta["fullscreen"]
+  local modal_fade = resolved_flag(resolved.fade, modal_settings_meta["fade"])
+  local modal_fullscreen = resolved_string(resolved.fullscreen, modal_settings_meta["fullscreen"])
 
   local dialog_classes = { 'modal-dialog' }
   if modal_size ~= '' then table.insert(dialog_classes, 'modal-' .. modal_size) end
