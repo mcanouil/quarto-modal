@@ -320,9 +320,12 @@ local function modal(el)
   --- Optional close button in the header (Bootstrap-rendered "x").
   --- ``close-button=false`` suppresses it; ``close-button-label`` overrides
   --- the default aria-label (useful for localisation).
-  local close_button_attr = el.attributes['close-button']
-  local include_close_button = close_button_attr == nil or close_button_attr ~= 'false'
-  local close_button_label = el.attributes['close-button-label'] or 'Close'
+  --- Both declare a `default:` in the schema's `modal` attribute group, so
+  --- the resolved table already carries the same value (`true`, `"Close"`)
+  --- as the literal fallbacks below when the document wrote nothing.
+  local close_button_attr = resolved_flag(resolved['close-button'], 'true')
+  local include_close_button = close_button_attr ~= 'false'
+  local close_button_label = resolved_flag(resolved['close-button-label'], 'Close')
 
   local header_html = html_mod.raw_header(
     header_level,
