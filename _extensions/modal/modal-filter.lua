@@ -444,7 +444,9 @@ end
 --- @param meta table Pandoc document metadata.
 --- @return nil Metadata is never modified by the check.
 local function check_document_options(meta)
-  checker:options(meta)
+  if quarto.doc.is_format("html:js") and quarto.doc.has_bootstrap() then
+    checker:options(meta)
+  end
 end
 
 return {
