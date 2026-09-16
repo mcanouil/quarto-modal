@@ -118,7 +118,9 @@ end
 --- Resolve a user-supplied size value to a Bootstrap size token.
 --- Accepts both raw Bootstrap tokens (``sm``/``lg``/``xl``) and friendly
 --- aliases (``small``/``large``/``extra-large``).
---- Emits a warning and returns the empty default when the value is unknown.
+--- Returns the empty default when the value is unknown. The schema check
+--- names an unknown value by itself, so this stays quiet and only applies
+--- the fallback; reporting it here too would name the same mistake twice.
 --- @param value string|nil User-supplied size value.
 --- @return string Resolved Bootstrap size token (one of "", "sm", "lg", "xl").
 local function resolve_size(value)
@@ -128,15 +130,34 @@ local function resolve_size(value)
   local normalised = value:lower()
   local resolved = SIZE_PRESETS[normalised]
   if resolved == nil then
-    log.log_warning(
-      EXTENSION_NAME,
-      "Unknown 'size' value '" .. value .. "'. " ..
-      "Expected one of: small/sm, medium/default, large/lg, extra-large/xlarge/xl. " ..
-      "Falling back to the default size."
-    )
     return ''
   end
   return resolved
+end
+
+--- Fold a schema-resolved attribute back to the string form the rest of
+--- this filter compares against.
+---
+--- The schema declares ``backdrop-static``, ``scrollable`` and ``keyboard``
+--- as booleans, so a value the document wrote and the schema accepted comes
+--- back as a real Lua boolean, not the string ``"true"``/``"false"`` that a
+--- Pandoc attribute always is. A bare ``or`` fallback would then treat an
+--- explicit ``false`` as unset, because ``false`` is the one non-nil value
+--- Lua's ``or`` still falls through. This stringifies a boolean so the
+--- explicit value survives, passes an invalid value through unchanged (the
+--- schema has already named it), and only falls back when the document did
+--- not write the attribute at all.
+--- @param value boolean|string|nil Schema-resolved attribute value.
+--- @param fallback string The document option to use when unset.
+--- @return string
+local function resolved_flag(value, fallback)
+  if value == nil then
+    return fallback
+  end
+  if type(value) == 'boolean' then
+    return tostring(value)
+  end
+  return value
 end
 
 --- Collect every identifier appearing anywhere in the document.
@@ -254,11 +275,12 @@ local function modal(el)
 
   local modal_id = el.identifier ~= '' and el.identifier or unique_modal_id()
 
-  local raw_size = el.attributes.size or modal_settings_meta["size"]
+  local resolved = checker:attributes(el.attributes, 'modal')
+  local raw_size = resolved.size or modal_settings_meta["size"]
   local modal_size = resolve_size(raw_size)
-  local modal_backdrop_static = el.attributes["backdrop-static"] or modal_settings_meta["backdrop-static"]
-  local modal_scrollable = el.attributes.scrollable or modal_settings_meta["scrollable"]
-  local modal_keyboard = el.attributes.keyboard or modal_settings_meta["keyboard"]
+  local modal_backdrop_static = resolved_flag(resolved["backdrop-static"], modal_settings_meta["backdrop-static"])
+  local modal_scrollable = resolved_flag(resolved.scrollable, modal_settings_meta["scrollable"])
+  local modal_keyboard = resolved_flag(resolved.keyboard, modal_settings_meta["keyboard"])
   local modal_centred = el.attributes.centred or modal_settings_meta["centred"]
   local modal_centered = el.attributes.centered or modal_settings_meta["centered"]
   if el.attributes.centred and el.attributes.centered then
