@@ -297,22 +297,24 @@ local function modal(el)
   local modal_backdrop_static = resolved_flag(resolved["backdrop-static"], modal_settings_meta["backdrop-static"])
   local modal_scrollable = resolved_flag(resolved.scrollable, modal_settings_meta["scrollable"])
   local modal_keyboard = resolved_flag(resolved.keyboard, modal_settings_meta["keyboard"])
-  -- `centred` declares `aliases: [centered]` in the schema, so the merge
-  -- inside `checker:attributes` already moves a document-written `centered`
-  -- into `resolved.centred`, with the declared spelling winning when both
-  -- are written (the schema check already names that conflict), and always
-  -- empties `resolved.centered`.
+  -- `centred` declares `aliases: [centered]` in the schema, and this
+  -- extension's own attribute list names `centered` too, so both advertise
+  -- the spelling. The merge inside `checker:attributes` moves a
+  -- document-written `centered` onto `resolved.centred`, with the declared
+  -- spelling winning when both are written (the schema check already names
+  -- that conflict), and always empties `resolved.centered`.
   --
-  -- `modal_settings_meta["centred"]` is never a falsy Lua value, at minimum
-  -- the string `"false"`, so `el.attributes.centred or modal_settings_meta["centred"]`
-  -- was never nil or false either, which made the "no centred, fall back to
-  -- centered" branch below unreachable: a document that wrote only
-  -- `centered` has never actually applied it here. That is a pre-existing
-  -- condition, not something this change fixes, so presence-testing
-  -- `el.attributes.centred` keeps it exactly as it was rather than letting
-  -- the schema's alias merge quietly start honouring `centered` alone.
+  -- Testing presence on `centred` alone previously carried forward a
+  -- pre-existing bug: `centered` written by itself was never honoured,
+  -- because `modal_settings_meta["centred"]` is never a falsy Lua value, so
+  -- the old `el.attributes.centred or modal_settings_meta["centred"]`
+  -- fallback chain could never reach `centered`. Testing presence on either
+  -- spelling fixes that: `resolved.centred` already carries the correctly
+  -- precedenced value once either was written, so this changes only the
+  -- "centered alone" case and leaves "centred alone", "both written" and
+  -- "neither written" exactly as they were.
   local modal_centred = modal_settings_meta["centred"]
-  if el.attributes.centred ~= nil then
+  if el.attributes.centred ~= nil or el.attributes.centered ~= nil then
     modal_centred = resolved_flag(resolved.centred, modal_settings_meta["centred"])
   end
   local modal_fade = resolved_flag(resolved.fade, modal_settings_meta["fade"])
