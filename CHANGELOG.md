@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+- fix: Check every attribute of the modal group against the schema, including size, scrollable, keyboard, backdrop-static, close-button, close-button-label, centred, fade and fullscreen, so a value the schema rejects is now named instead of applied without a word. (#46)
+- fix: Remove the extension's own duplicate fullscreen and centred warnings, now that the schema names each mistake once. (#46)
+- fix: Honour the centered spelling of centred, which the schema and the extension both declared but the code never read. (#46)
+- fix: Gate the options check on html:js with Bootstrap so non-acting formats stay silent. (#46)
+
 ### Documentation
 
 - docs: Serve the extension's social card as the Open Graph image, so a shared link shows the card rather than the first image on the page. (#43)
@@ -10,6 +17,7 @@
 
 - build: Update the vendored Lua modules to 2.3.0, which includes the `schema-check` fix for an extension whose entry points are in a subdirectory. A module no longer carries a version line in its header, so its checksum changes only when its code changes. (#44)
 - build: Fetch the schema validator from a Quarto Wizard release asset rather than a raw path inside its repository, which a refactor could move without notice. The vendored file is unchanged. (#45)
+- build: Update the vendored Lua modules to 2.5.0, which adds the accessors that read what the schema resolves an option, an element's attributes and a format's options to. The schema validator moves to its own release train and is pinned at `schema-v2.1.0`, which accepts only `true` and `false` as a boolean. (#46)
 
 ## 1.6.1 (2026-09-07)
 
