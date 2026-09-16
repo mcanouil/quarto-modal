@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+- fix: Check every attribute of the modal group against the schema, including size, scrollable, keyboard, backdrop-static, close-button, close-button-label, centred, fade and fullscreen, so a value the schema rejects is now named instead of applied without a word. (#46)
+- fix: Remove the extension's own duplicate fullscreen and centred warnings, now that the schema names each mistake once. (#46)
+- fix: Honour the centered spelling of centred, which the schema and the extension both declared but the code never read. (#46)
+- fix: Gate the options check on html:js with Bootstrap so non-acting formats stay silent. (#46)
+
 ### Documentation
 
 - docs: Serve the extension's social card as the Open Graph image, so a shared link shows the card rather than the first image on the page. (#43)
