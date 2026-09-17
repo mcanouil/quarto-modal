@@ -93,9 +93,9 @@ extensions:
 
 : Dialog options. {.striped .hover tbl-colwidths="[17,12,11,60]"}
 
-::: {.callout-caution}
-`centred` is spelled the British way, and only that spelling reaches the dialog.
-`centered` written on its own is read as an ordinary attribute and does nothing, with no warning; written alongside `centred` it warns and is discarded.
+::: {.callout-note}
+`centred` is spelled the British way, and `centered` is accepted as an alias of it.
+Either spelling reaches the dialog.
 :::
 
 ### Container-only attributes
