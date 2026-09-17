@@ -25,6 +25,7 @@ The first heading becomes the title, and a horizontal rule separates the footer 
 {{{< modal toggle target=modal-basic label="Open the basic modal" >}}}
 
 ::: {#modal-basic}
+
 ## A basic modal
 
 The body, written as ordinary markdown, so a [link](https://quarto.org) or a
@@ -33,12 +34,14 @@ list works as it would anywhere else.
 ---
 
 {{{< modal dismiss inside=true label="Close" >}}}
+
 :::
 ````
 
 {{< modal toggle target=modal-basic label="Open the basic modal" >}}
 
 ::: {#modal-basic}
+
 ## A basic modal
 
 The body, written as ordinary markdown, so a [link](https://quarto.org) or a list works as it would anywhere else.
@@ -46,9 +49,69 @@ The body, written as ordinary markdown, so a [link](https://quarto.org) or a lis
 ---
 
 {{< modal dismiss inside=true label="Close" >}}
+
 :::
 
 The dismiss button sits inside the modal it closes, so it uses `inside=true` rather than naming a target.
+
+## The default button type
+
+`type` is the first argument of the shortcode, and it is positional.
+Leave it out and you get a toggle button.
+
+{{< modal target=modal-default-type label="Open without a type" >}}
+
+::: {#modal-default-type}
+
+## Opened by a bare toggle
+
+The button that opened this modal named no type at all.
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+
+:::
+
+````markdown
+{{{< modal target=modal-default-type label="Open without a type" >}}}
+````
+
+Write the type as a bare word, and never as `type=toggle`.
+A named `type` is read as an attribute instead.
+The extension then reports a key it does not recognise, and you still get a toggle button.
+The [button table](reference.qmd#buttons) lists the two values the argument accepts.
+
+## Dismiss buttons
+
+A dismiss button closes a modal, and it takes more than one shape.
+
+{{< modal toggle target=modal-dismiss label="Open the dismiss example" >}}
+
+::: {#modal-dismiss}
+
+## Three ways to close
+
+Each button in the footer closes this modal.
+
+---
+
+{{< modal dismiss target=modal-dismiss label="Close by name" >}}
+{{< modal dismiss inside=true label="Cancel" classes="btn btn-secondary" >}}
+{{< modal dismiss inside=true >}}
+
+:::
+
+````markdown
+{{{< modal dismiss target=modal-dismiss label="Close by name" >}}}
+{{{< modal dismiss inside=true label="Cancel" classes="btn btn-secondary" >}}}
+{{{< modal dismiss inside=true >}}}
+````
+
+`target` names the modal to close, so the button works from anywhere in the page.
+`inside=true` drops the target, and the button then closes the modal that holds it.
+A dismiss button with no label becomes Bootstrap's bare cross, which is the button the header carries.
+`classes` replaces the default classes on any button.
 
 ## Sizes
 
@@ -59,6 +122,7 @@ The dismiss button sits inside the modal it closes, so it uses `inside=true` rat
 {{< modal toggle target=modal-xl label="Extra large" classes="btn btn-outline-primary" >}}
 
 ::: {#modal-small size=small}
+
 ## Small
 
 `size=small`, which resolves to the Bootstrap `sm` token.
@@ -66,9 +130,11 @@ The dismiss button sits inside the modal it closes, so it uses `inside=true` rat
 ---
 
 {{< modal dismiss inside=true label="Close" >}}
+
 :::
 
 ::: {#modal-large size=lg}
+
 ## Large
 
 `size=lg`.
@@ -76,9 +142,11 @@ The dismiss button sits inside the modal it closes, so it uses `inside=true` rat
 ---
 
 {{< modal dismiss inside=true label="Close" >}}
+
 :::
 
 ::: {#modal-xl size=extra-large}
+
 ## Extra large
 
 `size=extra-large`, which resolves to `xl`.
@@ -86,12 +154,36 @@ The dismiss button sits inside the modal it closes, so it uses `inside=true` rat
 ---
 
 {{< modal dismiss inside=true label="Close" >}}
+
 :::
 
 ```markdown
 ::: {#modal-small size=small}
 ::: {#modal-large size=lg}
 ::: {#modal-xl size=extra-large}
+```
+
+## The default width
+
+`size=medium` and `size=default` add no size class at all, so the dialog keeps the width Bootstrap gives it.
+Either spelling gives one modal its default width back when a project sets `size` for every modal.
+
+{{< modal toggle target=modal-default-width label="Default width" classes="btn btn-outline-primary" >}}
+
+::: {#modal-default-width size=medium}
+
+## Medium is the default
+
+`size=medium` is the same width as a modal that sets no size.
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+
+:::
+
+```markdown
+::: {#modal-default-width size=medium}
 ```
 
 ## Scrolling, fullscreen, and a static backdrop
@@ -101,6 +193,7 @@ The dismiss button sits inside the modal it closes, so it uses `inside=true` rat
 {{< modal toggle target=modal-static label="Static backdrop" classes="btn btn-outline-primary" >}}
 
 ::: {#modal-scrollable scrollable=true}
+
 ## Scrollable
 
 The body scrolls rather than the page behind it.
@@ -110,9 +203,11 @@ The body scrolls rather than the page behind it.
 ---
 
 {{< modal dismiss inside=true label="Close" >}}
+
 :::
 
 ::: {#modal-fullscreen fullscreen=lg}
+
 ## Fullscreen below a breakpoint
 
 `fullscreen=lg` fills the screen on anything narrower than the large breakpoint, and behaves normally above it.
@@ -120,9 +215,11 @@ The body scrolls rather than the page behind it.
 ---
 
 {{< modal dismiss inside=true label="Close" >}}
+
 :::
 
 ::: {#modal-static backdrop-static=true keyboard=false}
+
 ## Static backdrop
 
 `backdrop-static=true` keeps this open when the backdrop is clicked, and `keyboard=false` stops <kbd>Esc</kbd> from closing it.
@@ -131,6 +228,7 @@ The close button is the way out.
 ---
 
 {{< modal dismiss inside=true label="Close" >}}
+
 :::
 
 ```markdown
@@ -138,6 +236,148 @@ The close button is the way out.
 ::: {#modal-fullscreen fullscreen=lg}
 ::: {#modal-static backdrop-static=true keyboard=false}
 ```
+
+## Fullscreen at every width
+
+`fullscreen=true` fills the screen at every width, and not only below a breakpoint.
+
+{{< modal toggle target=modal-fullscreen-always label="Always fullscreen" classes="btn btn-outline-primary" >}}
+
+::: {#modal-fullscreen-always fullscreen=true}
+
+## Always fullscreen
+
+This dialog keeps no margin, whatever the width of the window.
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+
+:::
+
+```markdown
+::: {#modal-fullscreen-always fullscreen=true}
+```
+
+[Dialog options](reference.qmd#dialog-options) lists every value `fullscreen` accepts.
+
+## Overriding a project default
+
+This site turns `fade` and `centred` on for every modal.
+One container turns either of them off again.
+
+{{< modal toggle target=modal-plain label="No fade, no centring" classes="btn btn-outline-primary" >}}
+
+::: {#modal-plain fade=false centred=false}
+
+## No fade and no centring
+
+This dialog appears at once, near the top of the window.
+Every other modal on this page fades in and sits in the middle.
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+
+:::
+
+```markdown
+::: {#modal-plain fade=false centred=false}
+```
+
+An attribute on the container always wins over the project or document setting.
+
+## The header close button
+
+The header carries a close button unless `close-button=false` removes it.
+A container with no horizontal rule gets no footer, so the header button is then the only button.
+
+{{< modal toggle target=modal-no-close label="No header cross" classes="btn btn-outline-primary" >}}
+{{< modal toggle target=modal-no-footer label="No footer" classes="btn btn-outline-primary" >}}
+
+::: {#modal-no-close close-button=false}
+
+## No cross in the header
+
+The footer button is the only button here.
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+
+:::
+
+::: {#modal-no-footer}
+
+## No footer at all
+
+This container holds no horizontal rule, so the extension builds no footer.
+The cross in the header closes it.
+
+:::
+
+```markdown
+::: {#modal-no-close close-button=false}
+::: {#modal-no-footer}
+```
+
+Give each modal a header close button or a footer that closes it.
+`close-button=false` with no footer leaves a dialog that only the backdrop and <kbd>Esc</kbd> can close.
+[Container-only attributes](reference.qmd#container-only-attributes) covers `close-button` and its label.
+
+## Headings inside the body
+
+The first heading becomes the title.
+Every later heading stays in the body, and the extension puts the modal identifier in front of its own identifier.
+A heading inside a modal can therefore repeat a heading on the page without a clash.
+
+{{< modal toggle target=modal-headings label="Headings in the body" classes="btn btn-outline-primary" >}}
+
+::: {#modal-headings}
+
+## A body with its own headings
+
+### Details
+
+The heading above is `modal-headings-details` in the page.
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+
+:::
+
+```markdown
+::: {#modal-headings}
+
+## A body with its own headings
+
+### Details
+
+:::
+```
+
+## A code block inside a modal
+
+A code block keeps its copy button inside a modal.
+The extension adds a small script whenever it builds a modal.
+The script gives each modal its own clipboard handler, with the modal as the container, so the copy works while the dialog holds the focus.
+
+{{< modal toggle target=modal-code label="Code in a modal" classes="btn btn-outline-primary" >}}
+
+::: {#modal-code}
+
+## Copying from a modal
+
+```python
+print("Copied from inside a modal.")
+```
+
+---
+
+{{< modal dismiss inside=true label="Close" >}}
+
+:::
 
 ## Opening a modal from a link
 
@@ -147,10 +387,11 @@ A link whose target is a modal identifier is expanded into a toggle, so a modal 
 [like this one](#modal-basic)
 ```
 
-The explicit Bootstrap attributes work too, when a link would be the wrong element:
+The explicit Bootstrap attributes work too, when a link would be the wrong element.
+A span that carries them opens the modal in the same way, [like this span]{bs-target="#modal-basic" bs-toggle="modal" .btn .btn-link}.
 
 ```markdown
-[Open it]{bs-target="#modal-basic" bs-toggle="modal"}
+[like this span]{bs-target="#modal-basic" bs-toggle="modal" .btn .btn-link}
 ```
 
 ## Accessibility
@@ -160,6 +401,7 @@ The explicit Bootstrap attributes work too, when a link would be the wrong eleme
 {{< modal toggle target=modal-described label="Described modal" classes="btn btn-outline-primary" >}}
 
 ::: {#modal-described description="described-note" close-button-label="Dismiss this dialog"}
+
 ## A described modal
 
 `close-button-label` renames the header's close button for screen readers.
@@ -167,6 +409,7 @@ The explicit Bootstrap attributes work too, when a link would be the wrong eleme
 ---
 
 {{< modal dismiss inside=true label="Close" >}}
+
 :::
 
 [This paragraph carries the identifier the modal points at.]{#described-note}
