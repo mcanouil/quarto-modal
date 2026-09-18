@@ -93,9 +93,14 @@ extensions:
 
 : Dialog options. {.striped .hover tbl-colwidths="[17,12,11,60]"}
 
-::: {.callout-note}
-`centred` is spelled the British way, and `centered` is accepted as an alias of it.
-Either spelling reaches the dialog.
+::: {.callout-caution}
+`centred` is spelled the British way, and the two spellings are not interchangeable everywhere.
+
+On a container, `centered` is accepted as an alias and reaches the dialog.
+Writing both on one container is reported, and one of the two is used.
+
+In metadata, under `extensions.modal`, only `centred` is read.
+`centered` there is dropped without a warning, because the schema accepts the name and the filter never looks for it.
 :::
 
 ### Container-only attributes
