@@ -388,10 +388,10 @@ A link whose target is a modal identifier is expanded into a toggle, so a modal 
 ```
 
 The explicit Bootstrap attributes work too, when a link would be the wrong element.
-A span that carries them opens the modal in the same way, [like this span]{bs-target="#modal-basic" bs-toggle="modal" .btn .btn-link}.
+A span that carries them opens the modal in the same way, [like this span]{bs-target="#modal-basic" bs-toggle="modal"}.
 
 ```markdown
-[like this span]{bs-target="#modal-basic" bs-toggle="modal" .btn .btn-link}
+[like this span]{bs-target="#modal-basic" bs-toggle="modal"}
 ```
 
 ::: {.callout-warning}
@@ -404,6 +404,9 @@ That makes the span focusable and announces it as a button, while Bootstrap stil
 The result announces itself as operable and is not.
 
 Use the link form above, or a real button, for anything a reader has to be able to open.
+
+The span above is deliberately left unstyled for the same reason.
+Adding `.btn` to it would make it look like a working button to a reader who cannot operate it.
 
 :::
 
