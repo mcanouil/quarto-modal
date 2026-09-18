@@ -97,7 +97,7 @@ extensions:
 `centred` is spelled the British way, and the two spellings are not interchangeable everywhere.
 
 On a container, `centered` is accepted as an alias and reaches the dialog.
-Writing both on one container is reported, and one of the two is used.
+Writing both on one container is reported, and `centred` wins, because the validator reads the declared name before any alias.
 
 In metadata, under `extensions.modal`, only `centred` is read.
 `centered` there is dropped without a warning, because the schema accepts the name and the filter never looks for it.

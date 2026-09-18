@@ -394,6 +394,19 @@ A span that carries them opens the modal in the same way, [like this span]{bs-ta
 [like this span]{bs-target="#modal-basic" bs-toggle="modal" .btn .btn-link}
 ```
 
+::: {.callout-warning}
+
+A span opens the modal with the mouse only.
+It takes no focus, so a keyboard cannot reach it, and a reader using one has no way to open the modal.
+
+Adding `tabindex="0"` and `role="button"` does not repair it.
+That makes the span focusable and announces it as a button, while Bootstrap still listens for a click, which a browser does not raise from <kbd>Enter</kbd> or <kbd>Space</kbd> on a span.
+The result announces itself as operable and is not.
+
+Use the link form above, or a real button, for anything a reader has to be able to open.
+
+:::
+
 ## Accessibility
 
 `description` points at the identifier of an element elsewhere on the page, and becomes the modal's `aria-describedby`.
