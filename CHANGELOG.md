@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.6.2 (2026-09-23)
+
 ### Bug Fixes
 
 - fix: Check every attribute of the modal group against the schema, including size, scrollable, keyboard, backdrop-static, close-button, close-button-label, centred, fade and fullscreen, so a value the schema rejects is now named instead of applied without a word. (#46)
