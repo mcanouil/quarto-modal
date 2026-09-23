@@ -13,7 +13,7 @@
 ### Documentation
 
 - docs: Serve the extension's social card as the Open Graph image, so a shared link shows the card rather than the first image on the page. (#43)
-- docs: Add worked examples for the parts of the extension the examples page did not show. These are the button type argument, the dismiss button forms, the default width, fullscreen at every width, a per-modal override of a project default, the header close button, body headings and a code block inside a modal.
+- docs: Add worked examples for the parts of the extension the examples page did not show. These are the button type argument, the dismiss button forms, the default width, fullscreen at every width, a per-modal override of a project default, the header close button, body headings and a code block inside a modal. (#47)
 
 ### Refactoring
 
