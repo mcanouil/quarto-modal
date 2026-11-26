@@ -3,11 +3,11 @@ sources:
   quarto-lua-modules:
     origin: "https://github.com/mcanouil/quarto-lua-modules"
     fetch: "{origin}/releases/download/{version}/{file}"
-    version: "2.13.0"
+    version: "2.14.0"
     licence: MIT
     files:
       content-extraction.lua:
-        sha256: "94b128f579bc01c70fdb00441331c41984fd16da5e2f51c0282d79dd41c9875d"
+        sha256: "8f99f572f34e84240dc9225498e3ff677777feab683f9bf51caf420a20f39f81"
         runtime: any
       html.lua:
         sha256: "7ca4f4af8f9ee2062452bef59d536a5582f1b4c5387fcaf2e1a1d3231ff89f6f"
@@ -16,7 +16,7 @@ sources:
         sha256: "5d99ceb89c813fbe4491310e42b4a4cff62e11dda42f01b4f61f969aa58e0706"
         runtime: any
       metadata.lua:
-        sha256: "29d7a6c7568d5e2e03838fdd9f175de98a185d139cd83813d33ee2164cdb5f2e"
+        sha256: "def44f9711f72ab84f8367234ca9c89a6dc5b1bae0d4ace59b5875e3ff728945"
         runtime: any
       pandoc-helpers.lua:
         sha256: "91437a3747432ae8cdbee955771210e21819e3c525f66fa741e57a34af0ac40b"
