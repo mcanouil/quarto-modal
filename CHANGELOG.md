@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- fix: Walk blocks with `Div:walk` instead of `pandoc.walk_block`, which Quarto 2 does not have.
+
 ## 1.6.2 (2026-09-23)
 
 ### Bug Fixes
