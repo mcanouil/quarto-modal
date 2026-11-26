@@ -187,7 +187,7 @@ local function collect_document_ids(doc)
       document_ids[el.identifier] = true
     end
   end
-  pandoc.walk_block(pandoc.Div(doc.blocks), {
+  pandoc.Div(doc.blocks):walk({
     Div = record,
     Header = record,
     Span = record,
@@ -243,7 +243,7 @@ end
 --- @param parent_id string Identifier of the enclosing modal.
 local function warn_on_nested_modals(blocks, parent_id)
   if blocks == nil then return end
-  pandoc.walk_block(pandoc.Div(blocks), {
+  pandoc.Div(blocks):walk({
     Div = function(child)
       if child.identifier and child.identifier:match('^modal%-') then
         log.log_warning(
